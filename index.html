@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <meta name="theme-color" content="#0a0f1e">
+    <title>پلتفرم یکپارچه آموزشی | سامانه پیشرفته خدمات مدارس</title>
+    
+    <meta name="description" content="سامانه هوشمند خدمات آموزشی: صدور گواهی تحصیلی، محاسبه گر پیشرفته معدل، آلبوم کلاسی دیجیتال و سیستم طراحی کارت و شماره صندلی آزمون">
+    <meta name="keywords" content="صدور گواهی, محاسبه معدل, معافیت تحصیلی, سیدا, آلبوم کلاسی, طراحی کارت صندلی, شماره صندلی آزمون, افزونه مرورگر">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        @font-face {
+            font-family: "Vazirmatn";
+            src: url("./assets/font/Vazirmatn.woff2") format("woff2");
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        :root {
+            --bg-primary: #0a0c15;
+            --bg-secondary: #0f1119;
+            --bg-card: rgba(18, 22, 35, 0.75);
+            --bg-card-solid: #121623;
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass-highlight: rgba(255, 255, 255, 0.03);
+            
+            --accent-1: #6366f1;
+            --accent-2: #8b5cf6;
+            --accent-3: #06b6d4;
+            --accent-4: #f59e0b;
+            
+            --text-primary: #ffffff;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+            
+            --success: #10b981;
+            --error: #ef4444;
+            --warning: #f59e0b;
+            
+            --shadow-glow: 0 0 24px rgba(99, 102, 241, 0.2);
+            --shadow-card: 0 20px 35px -12px rgba(0, 0, 0, 0.4);
+            --transition: all 0.25s cubic-bezier(0.2, 0, 0, 1);
+            
+            /* نسبت‌های طلایی برای فونت */
+            --font-xs: clamp(0.7rem, 0.65rem + 0.25vw, 0.75rem);
+            --font-sm: clamp(0.8rem, 0.75rem + 0.3vw, 0.85rem);
+            --font-base: clamp(0.9rem, 0.85rem + 0.35vw, 1rem);
+            --font-md: clamp(1rem, 0.95rem + 0.4vw, 1.1rem);
+            --font-lg: clamp(1.2rem, 1.1rem + 0.5vw, 1.4rem);
+            --font-xl: clamp(1.5rem, 1.3rem + 0.8vw, 1.8rem);
+            --font-2xl: clamp(1.8rem, 1.6rem + 1vw, 2.2rem);
+        }
+
+        body {
+            font-family: 'Vazirmatn', 'Segoe UI', system-ui, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .bg-orb {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            background: radial-gradient(circle at 20% 30%, rgba(99, 102, 241, 0.12), transparent 50%),
+                        radial-gradient(circle at 85% 70%, rgba(139, 92, 246, 0.1), transparent 55%);
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent-1);
+            border-radius: 10px;
+        }
+
+        /* هدر */
+        .header {
+            flex-shrink: 0;
+            padding: 16px 28px;
+            background: rgba(10, 12, 21, 0.7);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(145deg, var(--accent-1), var(--accent-2));
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.35);
+        }
+
+        .logo-text {
+            font-size: var(--font-lg);
+            font-weight: 800;
+            background: linear-gradient(135deg, #ffffff, var(--accent-1), var(--accent-2));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.3px;
+        }
+
+        .version-badge {
+            font-size: var(--font-xs);
+            background: rgba(255,255,255,0.06);
+            padding: 4px 12px;
+            border-radius: 40px;
+            color: var(--text-muted);
+        }
+
+        /* محتوای اصلی */
+        .main-container {
+            flex: 1;
+            padding: 28px 28px 32px;
+        }
+
+        /* دو ستونی با نسبت 2/3 و 1/3 */
+        .two-columns {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .glass-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(14px);
+            border: 1px solid var(--glass-border);
+            border-radius: 32px;
+            transition: var(--transition);
+            overflow: hidden;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .glass-card:hover {
+            border-color: rgba(99, 102, 241, 0.4);
+            box-shadow: var(--shadow-glow);
+            transform: translateY(-4px);
+        }
+
+        .card-header {
+            padding: 26px 28px 16px 28px;
+            text-align: center;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .card-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(139, 92, 246, 0.1));
+            border-radius: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 14px;
+            font-size: 2rem;
+            color: var(--accent-1);
+        }
+
+        .card-title {
+            font-size: var(--font-xl);
+            font-weight: 800;
+            margin-bottom: 8px;
+            letter-spacing: -0.2px;
+        }
+
+        .card-sub {
+            font-size: var(--font-sm);
+            color: var(--text-muted);
+        }
+
+        .card-body {
+            padding: 24px 28px 28px;
+            flex: 1;
+        }
+
+        /* شبکه 4 تایی 2*2 */
+        .services-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 22px;
+        }
+
+        .service-tile {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--glass-border);
+            border-radius: 26px;
+            padding: 24px 18px;
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.2, 0, 0, 1);
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 14px;
+        }
+
+        .service-tile:hover {
+            background: rgba(99, 102, 241, 0.1);
+            border-color: var(--accent-1);
+            transform: translateY(-6px);
+        }
+
+        .tile-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.7rem;
+            transition: transform 0.2s;
+        }
+
+        .service-tile:hover .tile-icon {
+            transform: scale(1.05);
+        }
+
+        .service-tile:nth-child(1) .tile-icon { background: rgba(99, 102, 241, 0.18); color: var(--accent-1); }
+        .service-tile:nth-child(2) .tile-icon { background: rgba(139, 92, 246, 0.18); color: var(--accent-2); }
+        .service-tile:nth-child(3) .tile-icon { background: rgba(6, 182, 212, 0.18); color: var(--accent-3); }
+        .service-tile:nth-child(4) .tile-icon { background: rgba(245, 158, 11, 0.18); color: var(--accent-4); }
+        .service-tile:nth-child(5) .tile-icon { background: rgba(239, 68, 68, 0.18); color: var(--error); }
+
+        .tile-info h4 {
+            color: white;
+            font-size: var(--font-md);
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .tile-info p {
+            font-size: var(--font-xs);
+            color: var(--text-muted);
+            line-height: 1.45;
+        }
+
+        .tile-arrow {
+            color: var(--text-muted);
+            transition: var(--transition);
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+
+        .service-tile:hover .tile-arrow {
+            opacity: 1;
+            color: var(--accent-1);
+            transform: translateX(-6px);
+        }
+
+        [dir="rtl"] .service-tile:hover .tile-arrow {
+            transform: translateX(6px);
+        }
+
+        /* بخش افزونه */
+        .extension-content {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .browser-card {
+            background: rgba(0, 0, 0, 0.32);
+            border-radius: 26px;
+            padding: 20px 22px;
+            margin-bottom: 24px;
+        }
+
+        .browser-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 14px;
+        }
+
+        .browser-id {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .browser-icon-lg {
+            width: 54px;
+            height: 54px;
+            background: var(--bg-card-solid);
+            border-radius: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+        }
+
+        .browser-meta .browser-name {
+            font-weight: 800;
+            font-size: var(--font-base);
+        }
+
+        .browser-status {
+            font-size: var(--font-xs);
+            color: var(--success);
+            margin-top: 4px;
+        }
+
+        .device-tag {
+            background: var(--glass-highlight);
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-size: var(--font-sm);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .warning-mobile {
+            background: rgba(239, 68, 68, 0.12);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 18px;
+            padding: 12px 16px;
+            margin-top: 14px;
+            font-size: var(--font-sm);
+            color: #fca5a5;
+            display: none;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .warning-mobile.show {
+            display: flex;
+        }
+
+        .btn-download {
+            background: linear-gradient(105deg, var(--accent-1), var(--accent-2));
+            border: none;
+            padding: 16px 22px;
+            border-radius: 60px;
+            font-family: 'Vazirmatn', sans-serif;
+            font-weight: 800;
+            font-size: var(--font-base);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-bottom: 16px;
+            box-shadow: 0 8px 24px rgba(99, 102, 241, 0.35);
+        }
+
+        .btn-download:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-download:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 14px 32px rgba(99, 102, 241, 0.5);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--glass-border);
+            padding: 14px 20px;
+            border-radius: 60px;
+            width: 100%;
+            font-family: 'Vazirmatn', sans-serif;
+            font-size: var(--font-sm);
+            font-weight: 600;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--accent-1);
+            color: var(--accent-1);
+            background: rgba(99, 102, 241, 0.05);
+        }
+
+        .features-row {
+            display: flex;
+            justify-content: center;
+            gap: 18px;
+            margin-top: 28px;
+            flex-wrap: wrap;
+        }
+
+        .feature-pill {
+            background: rgba(255,255,255,0.04);
+            padding: 6px 16px;
+            border-radius: 60px;
+            font-size: var(--font-xs);
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            color: var(--text-muted);
+            transition: var(--transition);
+        }
+
+        .feature-pill:hover {
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--accent-1);
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 28px;
+            right: 28px;
+            background: var(--bg-card-solid);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 14px 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            z-index: 3000;
+            transform: translateX(450px);
+            transition: transform 0.35s cubic-bezier(0.2, 0, 0, 1);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+            font-size: var(--font-sm);
+            font-weight: 500;
+        }
+        
+        [dir="rtl"] .toast {
+            right: auto;
+            left: 28px;
+            transform: translateX(-450px);
+        }
+        
+        .toast.show {
+            transform: translateX(0);
+        }
+        
+        .toast.success { border-right: 5px solid var(--success); }
+        .toast.error { border-right: 5px solid var(--error); }
+        .toast.warning { border-right: 5px solid var(--warning); }
+        
+        [dir="rtl"] .toast.success { border-right: none; border-left: 5px solid var(--success); }
+        [dir="rtl"] .toast.error { border-left: 5px solid var(--error); }
+
+        /* فوتر */
+        .footer {
+            flex-shrink: 0;
+            padding: 18px 28px;
+            border-top: 1px solid var(--glass-border);
+            background: rgba(10, 12, 21, 0.7);
+            backdrop-filter: blur(12px);
+            text-align: center;
+            font-size: var(--font-xs);
+            color: var(--text-muted);
+        }
+        
+        .footer a {
+            color: var(--accent-1);
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+        
+        .footer a:hover {
+            color: var(--accent-2);
+        }
+
+        /* مودال حرفه‌ای */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.88);
+            backdrop-filter: blur(24px);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-overlay.active {
+            display: flex;
+            animation: fadeIn 0.25s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .modal-window {
+            background: var(--bg-card-solid);
+            border: 1px solid var(--glass-border);
+            border-radius: 44px;
+            max-width: 460px;
+            width: 90%;
+            padding: 28px 30px 32px;
+            animation: slideUp 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+        }
+        
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 22px;
+        }
+        
+        .modal-header h3 {
+            font-size: var(--font-lg);
+            background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 2rem;
+            cursor: pointer;
+            transition: var(--transition);
+            line-height: 1;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+        
+        .modal-close:hover {
+            color: var(--accent-1);
+            background: rgba(255,255,255,0.05);
+        }
+        
+        .step-item {
+            background: rgba(255,255,255,0.04);
+            border-radius: 20px;
+            padding: 14px 18px;
+            margin-bottom: 12px;
+            font-size: var(--font-sm);
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            transition: var(--transition);
+        }
+        
+        .step-item:hover {
+            background: rgba(99, 102, 241, 0.08);
+            transform: translateX(5px);
+        }
+        
+        [dir="rtl"] .step-item:hover {
+            transform: translateX(-5px);
+        }
+        
+        .step-num {
+            width: 28px;
+            height: 28px;
+            background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+            border-radius: 12px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--font-xs);
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+        
+        .mobile-help-message {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.12), rgba(245, 158, 11, 0.05));
+            border: 1px solid var(--warning);
+            border-radius: 20px;
+            padding: 18px;
+            margin-top: 16px;
+            font-size: var(--font-sm);
+            text-align: center;
+        }
+
+        /* ========== ریسپانسیو عالی برای موبایل ========== */
+        @media (max-width: 1000px) {
+            .two-columns {
+                grid-template-columns: 1fr;
+                gap: 28px;
+            }
+            .main-container {
+                padding: 20px 24px 28px;
+            }
+            .card-header {
+                padding: 22px 24px 14px 24px;
+            }
+            .card-icon {
+                width: 60px;
+                height: 60px;
+                font-size: 1.7rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .services-grid {
+                gap: 18px;
+            }
+            .service-tile {
+                padding: 20px 16px;
+            }
+            .tile-icon {
+                width: 56px;
+                height: 56px;
+                font-size: 1.5rem;
+            }
+            .card-body {
+                padding: 20px 22px 24px;
+            }
+            .header {
+                padding: 12px 20px;
+            }
+        }
+        
+        @media (max-width: 640px) {
+            .services-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+            .service-tile {
+                padding: 18px 20px;
+                flex-direction: row;
+                text-align: right;
+                gap: 18px;
+            }
+            .tile-icon {
+                width: 52px;
+                height: 52px;
+                font-size: 1.4rem;
+            }
+            .tile-info {
+                text-align: right;
+                flex: 1;
+            }
+            .tile-info h4 {
+                font-size: var(--font-base);
+            }
+            .tile-arrow {
+                margin-right: auto;
+                margin-top: 0;
+            }
+            .card-icon {
+                width: 52px;
+                height: 52px;
+                font-size: 1.5rem;
+            }
+            .card-title {
+                font-size: var(--font-lg);
+            }
+            .btn-download {
+                padding: 14px 18px;
+                font-size: var(--font-sm);
+            }
+            .browser-icon-lg {
+                width: 46px;
+                height: 46px;
+                font-size: 1.5rem;
+            }
+            .modal-window {
+                padding: 22px 24px 26px;
+                border-radius: 36px;
+            }
+            .toast {
+                bottom: 20px;
+                right: 20px;
+                left: 20px;
+                padding: 12px 18px;
+            }
+            [dir="rtl"] .toast {
+                right: 20px;
+                left: 20px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .header-container {
+                flex-direction: column;
+                text-align: center;
+            }
+            .logo {
+                justify-content: center;
+            }
+            .main-container {
+                padding: 16px 16px 24px;
+            }
+            .service-tile {
+                padding: 14px 16px;
+            }
+            .tile-icon {
+                width: 46px;
+                height: 46px;
+                font-size: 1.2rem;
+            }
+            .card-body {
+                padding: 16px 18px 20px;
+            }
+        }
+        
+        .animate-item {
+            animation: fadeUp 0.5s ease forwards;
+            opacity: 0;
+        }
+        
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+<div class="bg-orb"></div>
+
+<header class="header">
+    <div class="header-container">
+        <div class="logo">
+            <div class="logo-icon"><i class="fas fa-graduation-cap"></i></div>
+            <div class="logo-text">EduPlatform</div>
+            <div class="version-badge">نسخه یکپارچه</div>
+        </div>
+        <div style="display: flex; gap: 8px; align-items: center;">
+            <i class="fas fa-shield-alt" style="color: var(--accent-1); font-size: var(--font-sm);"></i>
+            <span style="font-size: var(--font-xs);">سامانه پیشرفته</span>
+        </div>
+    </div>
+</header>
+
+<div class="main-container">
+    <div class="two-columns">
+        <!-- ستون راست: خدمات به صورت شبکه 2*2 -->
+        <div class="glass-card animate-item" style="animation-delay: 0.05s;">
+            <div class="card-header">
+                <h3 class="card-title">خدمات آموزشی پیشرفته</h3>
+            </div>
+            <div class="card-body">
+                <div class="services-grid">
+                    <a href="./certificate" class="service-tile">
+                        <div class="tile-icon"><i class="fas fa-certificate"></i></div>
+                        <div class="tile-info">
+                            <h4>صدور گواهی تحصیلی</h4>
+                            <p>اشتغال به تحصیل · اتصال یکپارچه به سیدا</p>
+                        </div>
+                        <div class="tile-arrow"><i class="fas fa-chevron-left"></i></div>
+                    </a>
+                    <a href="./gpa-calculator" class="service-tile">
+                        <div class="tile-icon"><i class="fas fa-calculator"></i></div>
+                        <div class="tile-info">
+                            <h4>محاسبه‌گر پیشرفته معدل</h4>
+                            <p>ترمیم، شرط علمی و تحلیل نمرات</p>
+                        </div>
+                        <div class="tile-arrow"><i class="fas fa-chevron-left"></i></div>
+                    </a>
+                    <a href="./profile-downloader" class="service-tile">
+                        <div class="tile-icon"><i class="fas fa-images"></i></div>
+                        <div class="tile-info">
+                            <h4>آلبوم کلاسی دیجیتال</h4>
+                            <p>دانلود پروفایل با کیفیت اصلی</p>
+                        </div>
+                        <div class="tile-arrow"><i class="fas fa-chevron-left"></i></div>
+                    </a>
+                    <a href="./seat-number/" class="service-tile">
+                        <div class="tile-icon"><i class="fas fa-ticket-alt"></i></div>
+                        <div class="tile-info">
+                            <h4>طراحی کارت و شماره صندلی</h4>
+                            <p>صدور و چاپ انبوه PDF استاندارد</p>
+                        </div>
+                        <div class="tile-arrow"><i class="fas fa-chevron-left"></i></div>
+                    </a>
+                    <a href="./failedstudents/" class="service-tile">
+                        <div class="tile-icon"><i class="fas fa-user-times"></i></div>
+                        <div class="tile-info">
+                            <h4>استخراج دروس مردودی</h4>
+                            <p>تحلیل کارنامه‌های PDF · فهرست دانش‌آموزان دارای مردودی</p>
+                        </div>
+                        <div class="tile-arrow"><i class="fas fa-chevron-left"></i></div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- ستون چپ: بخش افزونه -->
+        <div class="glass-card animate-item" style="animation-delay: 0.1s;">
+            <div class="card-header">
+                <h3 class="card-title">افزونه مرورگر آموزشی</h3>
+            </div>
+            <div class="card-body extension-content">
+                <div class="browser-card">
+                    <div class="browser-row">
+                        <div class="browser-id">
+                            <div class="browser-icon-lg" id="browserDynamicIcon"><i class="fab fa-chrome"></i></div>
+                            <div class="browser-meta">
+                                <div class="browser-name" id="dynamicBrowserName">Google Chrome</div>
+                                <div class="browser-status"><i class="fas fa-check-circle"></i> پشتیبانی کامل</div>
+                            </div>
+                        </div>
+                        <div class="device-tag" id="dynamicDeviceTag">
+                            <i class="fas fa-desktop"></i> <span id="deviceLabel">دسکتاپ</span>
+                        </div>
+                    </div>
+                    <div id="mobileWarningMsg" class="warning-mobile">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <span>⚠️ افزونه فقط روی مرورگر دسکتاپ قابل نصب و اجراست.</span>
+                    </div>
+                </div>
+
+                <button id="smartDownloadBtn" class="btn-download">
+                    <i class="fas fa-download"></i> دانلود افزونه (extension.zip)
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+
+                <button id="helpModalBtn" class="btn-outline">
+                    <i class="fas fa-question-circle"></i> راهنمای نصب افزونه
+                </button>
+
+                <div class="features-row">
+                    <span class="feature-pill"><i class="fas fa-check-circle"></i> کاملاً رایگان</span>
+                    <span class="feature-pill"><i class="fas fa-bolt"></i> نصب آفلاین</span>
+                    <span class="feature-pill"><i class="fas fa-shield-alt"></i> متن‌باز</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="footer">
+    <div><i class="fas fa-code"></i> طراحی و توسعه توسط <a href="https://t.me/mbrzgrsa" target="_blank">mbrzgrsa</a> | <i class="far fa-copyright"></i> ۱۴۰۵ - پلتفرم یکپارچه آموزشی</div>
+</footer>
+
+<!-- مودال -->
+<div id="modalOverlay" class="modal-overlay">
+    <div class="modal-window">
+        <div class="modal-header">
+            <h3><i class="fas fa-cogs"></i> نصب افزونه در دسکتاپ</h3>
+            <button class="modal-close" id="closeModalBtn">&times;</button>
+        </div>
+        <div id="modalStepsContainer">
+            <div class="step-item"><span class="step-num">۱</span> فایل extension.zip را دانلود کنید</div>
+            <div class="step-item"><span class="step-num">۲</span> فایل را Extract (از حالت فشرده خارج) کنید</div>
+            <div class="step-item"><span class="step-num">۳</span> آدرس chrome://extensions را باز کنید</div>
+            <div class="step-item"><span class="step-num">۴</span> حالت Developer mode را فعال کنید</div>
+            <div class="step-item"><span class="step-num">۵</span> روی Load unpacked کلیک و پوشه extracted را انتخاب کنید</div>
+        </div>
+        <button id="modalGotItBtn" class="btn-download" style="margin-top: 20px; background: linear-gradient(135deg, #2d2f3e, #1e1f2c); box-shadow: none;">متوجه شدم</button>
+    </div>
+</div>
+
+<div id="toast" class="toast">
+    <i class="fas" id="toastIcon"></i>
+    <span id="toastMessage"></span>
+</div>
+
+<script>
+    (function() {
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const toastIcon = document.getElementById('toastIcon');
+            const toastMessage = document.getElementById('toastMessage');
+            if (!toast) return;
+            
+            toast.classList.remove('show', 'success', 'error', 'warning');
+            toastIcon.className = 'fas';
+            
+            if (type === 'success') {
+                toastIcon.classList.add('fa-check-circle');
+                toast.classList.add('success');
+            } else if (type === 'error') {
+                toastIcon.classList.add('fa-exclamation-circle');
+                toast.classList.add('error');
+            } else if (type === 'warning') {
+                toastIcon.classList.add('fa-exclamation-triangle');
+                toast.classList.add('warning');
+            }
+            
+            toastMessage.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3800);
+        }
+        
+        const ua = navigator.userAgent;
+        let browserName = "سایر مرورگرها";
+        let browserIcon = "fa-globe";
+        
+        if (ua.indexOf("Chrome") > -1 && ua.indexOf("Edg") === -1 && ua.indexOf("OPR") === -1 && ua.indexOf("Brave") === -1) {
+            browserName = "Google Chrome";
+            browserIcon = "fa-chrome";
+        } else if (ua.indexOf("Edg") > -1) {
+            browserName = "Microsoft Edge";
+            browserIcon = "fa-edge";
+        } else if (ua.indexOf("Firefox") > -1) {
+            browserName = "Mozilla Firefox";
+            browserIcon = "fa-firefox";
+        } else if (ua.indexOf("OPR") > -1 || ua.indexOf("Opera") > -1) {
+            browserName = "Opera";
+            browserIcon = "fa-opera";
+        } else if (ua.indexOf("Safari") > -1 && ua.indexOf("Chrome") === -1) {
+            browserName = "Safari";
+            browserIcon = "fa-safari";
+        } else if (ua.indexOf("Brave") > -1) {
+            browserName = "Brave";
+            browserIcon = "fa-chrome";
+        }
+        
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua);
+        const isTablet = /iPad|Android(?!.*Mobile)/i.test(ua);
+        let deviceType = "دسکتاپ";
+        let deviceIcon = "fa-desktop";
+        let isMobileOrTablet = false;
+        
+        if (isTablet) {
+            deviceType = "تبلت";
+            deviceIcon = "fa-tablet-alt";
+            isMobileOrTablet = true;
+        } else if (isMobile) {
+            deviceType = "موبایل";
+            deviceIcon = "fa-mobile-alt";
+            isMobileOrTablet = true;
+        }
+        
+        const browserIconElem = document.getElementById('browserDynamicIcon');
+        if (browserIconElem) browserIconElem.innerHTML = `<i class="fab ${browserIcon}"></i>`;
+        const browserNameSpan = document.getElementById('dynamicBrowserName');
+        if (browserNameSpan) browserNameSpan.innerText = browserName;
+        const deviceTagSpan = document.getElementById('deviceLabel');
+        const deviceIconSpan = document.querySelector('#dynamicDeviceTag i');
+        if (deviceTagSpan) deviceTagSpan.innerText = deviceType;
+        if (deviceIconSpan) deviceIconSpan.className = `fas ${deviceIcon}`;
+        
+        const warningDiv = document.getElementById('mobileWarningMsg');
+        const downloadBtn = document.getElementById('smartDownloadBtn');
+        
+        async function downloadExtension() {
+            const zipUrl = './extension.zip';
+            const originalText = downloadBtn.innerHTML;
+            downloadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> در حال بررسی...';
+            downloadBtn.disabled = true;
+            
+            try {
+                const headResponse = await fetch(zipUrl, { method: 'HEAD' });
+                if (!headResponse.ok) throw new Error('فایل افزونه یافت نشد');
+                
+                downloadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> در حال دانلود...';
+                const response = await fetch(zipUrl);
+                if (!response.ok) throw new Error('خطا در دانلود');
+                
+                const blob = await response.blob();
+                const link = document.createElement('a');
+                const url = URL.createObjectURL(blob);
+                link.href = url;
+                link.download = 'extension.zip';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(url);
+                
+                showToast('✅ دانلود افزونه آغاز شد. پس از اتمام Extract کنید.', 'success');
+            } catch (err) {
+                console.error(err);
+                showToast('❌ خطا: فایل extension.zip موجود نیست.', 'error');
+            } finally {
+                downloadBtn.innerHTML = originalText;
+                downloadBtn.disabled = false;
+            }
+        }
+        
+        if (isMobileOrTablet) {
+            if (warningDiv) warningDiv.classList.add('show');
+            if (downloadBtn) {
+                downloadBtn.disabled = true;
+                downloadBtn.style.opacity = "0.5";
+                downloadBtn.style.cursor = "not-allowed";
+                downloadBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    showToast('⛔ افزونه فقط روی مرورگر دسکتاپ قابل نصب است.', 'warning');
+                });
+            }
+            const modalStepsContainer = document.getElementById('modalStepsContainer');
+            if (modalStepsContainer) {
+                modalStepsContainer.innerHTML = `
+                    <div class="mobile-help-message">
+                        <i class="fas fa-info-circle" style="font-size: 1.5rem; display: block; margin-bottom: 10px;"></i>
+                        <strong>⚠️ توجه مهم</strong><br><br>
+                        افزونه مرورگر فقط روی سیستم‌عامل‌های دسکتاپ (ویندوز، مک، لینوکس) قابل نصب است.<br><br>
+                        لطفاً از طریق رایانه خود به این صفحه مراجعه کنید.
+                    </div>
+                `;
+            }
+        } else {
+            if (warningDiv) warningDiv.classList.remove('show');
+            if (downloadBtn) {
+                downloadBtn.disabled = false;
+                downloadBtn.style.opacity = "1";
+                downloadBtn.style.cursor = "pointer";
+                downloadBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    downloadExtension();
+                });
+            }
+        }
+        
+        // مودال
+        const modalOverlay = document.getElementById('modalOverlay');
+        const helpModalBtn = document.getElementById('helpModalBtn');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const modalGotItBtn = document.getElementById('modalGotItBtn');
+        
+        function openModal() {
+            if (modalOverlay) {
+                modalOverlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+        
+        function closeModal() {
+            if (modalOverlay) {
+                modalOverlay.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        }
+        
+        if (helpModalBtn) helpModalBtn.addEventListener('click', openModal);
+        if (closeModalBtn) closeModalBtn.addEventListener('click', closeModal);
+        if (modalGotItBtn) modalGotItBtn.addEventListener('click', closeModal);
+        
+        if (modalOverlay) {
+            modalOverlay.addEventListener('click', (e) => {
+                if (e.target === modalOverlay) closeModal();
+            });
+        }
+        
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modalOverlay && modalOverlay.classList.contains('active')) {
+                closeModal();
+            }
+        });
+        
+        const animItems = document.querySelectorAll('.animate-item');
+        animItems.forEach((el, idx) => {
+            el.style.animationDelay = `${0.05 + idx * 0.08}s`;
+            el.style.opacity = "1";
+        });
+    })();
+</script>
+</body>
+</html>
