@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="fa">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <meta name="theme-color" content="#0f172a">
+    <title>سیستم حرفه‌ای آلبوم کلاسی - چیدمان هوشمند</title>
+    <link rel="stylesheet" href="./assets/css/all.min.css">
+    <link rel="stylesheet" href="./assets/css/style.css">
+</head>
+<body>
+    <!-- هدر موبایل (فقط در موبایل نمایش داده می‌شود) -->
+    <div class="mobile-header" id="mobileHeader">
+        <button class="mobile-menu-btn" id="mobileMenuBtn">
+            <i class="fas fa-bars"></i>
+        </button>
+        <div class="mobile-logo">
+            <i class="fas fa-images"></i>
+            <span>آلبوم کلاسی هوشمند</span>
+        </div>
+        <div class="mobile-header-spacer"></div>
+    </div>
+    
+    <!-- ماسک overlay برای بستن منو در موبایل -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    
+    <div class="app-container">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <div class="logo-icon"><i class="fas fa-images"></i></div>
+                    <span>آلبوم کلاسی هوشمند</span>
+                </div>
+                <button class="sidebar-close-btn" id="sidebarCloseBtn">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <nav class="sidebar-nav">
+                <button class="nav-item active" data-tab="excel-upload"><i class="fas fa-file-excel"></i><span>آپلود Excel</span></button>
+                <button class="nav-item" data-tab="school-info"><i class="fas fa-school"></i><span>اطلاعات آموزشگاه</span></button>
+                <button class="nav-item" data-tab="download-images"><i class="fas fa-download"></i><span>دانلود تصاویر</span></button>
+                <button class="nav-item" data-tab="album-design"><i class="fas fa-palette"></i><span>طراحی آلبوم</span></button>
+                <button class="nav-item" data-tab="help"><i class="fas fa-question-circle"></i><span>راهنما</span></button>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="user-profile">
+                    <div class="avatar"><i class="fas fa-user"></i></div>
+                    <div class="user-info">
+                        <div class="username">مدیر سیستم</div>
+                        <div class="role">آلبوم کلاسی هوشمند</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="content-header">
+                <div class="header-title">
+                    <h1><i class="fas fa-images"></i> سیستم آلبوم کلاسی هوشمند</h1>
+                    <p>چیدمان داینامیک | هر کلاس در یک برگ A4 | محاسبه هوشمند ابعاد کاشی‌ها</p>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-outline" id="homeBtn"><i class="fas fa-home"></i> خانه</button>
+                    <button class="btn btn-outline" id="helpBtn"><i class="fas fa-question-circle"></i> راهنما</button>
+                    <button class="btn btn-primary" id="resetBtn"><i class="fas fa-redo"></i> شروع مجدد</button>
+                </div>
+            </header>
+
+            <div class="content-area">
+                <!-- تب 1: آپلود Excel -->
+                <div class="tab-pane active" id="tab-excel-upload">
+                    <div class="tab-header">
+                        <h2><i class="fas fa-file-excel"></i> آپلود فایل Excel</h2>
+                        <p>فایل Excel حاوی اطلاعات دانش‌آموزان را آپلود کنید</p>
+                    </div>
+                    <div class="card-panel">
+                        <div class="form-group full-width">
+                            <label class="form-label required"><i class="fas fa-file-excel"></i> انتخاب فایل Excel</label>
+                            <input type="file" id="excelFile" accept=".xlsx,.xls,.csv" style="display: none;">
+                            <div class="button-group">
+                                <button class="btn btn-primary" id="uploadExcelBtn"><i class="fas fa-upload"></i> انتخاب فایل</button>
+                                <button class="btn btn-outline" id="downloadSampleBtn"><i class="fas fa-download"></i> دانلود نمونه</button>
+                            </div>
+                            <div class="form-hint" id="excelFileName"></div>
+                        </div>
+                    </div>
+
+                    <div id="columnSelector" style="display: none;">
+                        <div class="card-panel">
+                            <h3 class="panel-title"><i class="fas fa-columns"></i> انتخاب ستون‌های داده</h3>
+                            <div class="column-selector">
+                                <h4>ستون کد ملی (برای دریافت تصویر):</h4>
+                                <div class="column-badges" id="nationalCodeColumns"></div>
+                            </div>
+                            <div class="column-selector">
+                                <h4>ستون نام دانش‌آموز:</h4>
+                                <div class="column-badges" id="firstNameColumns"></div>
+                            </div>
+                            <div class="column-selector">
+                                <h4>ستون نام خانوادگی:</h4>
+                                <div class="column-badges" id="lastNameColumns"></div>
+                            </div>
+                            <div class="column-selector">
+                                <h4>ستون کلاس/پایه:</h4>
+                                <div class="column-badges" id="classColumns"></div>
+                            </div>
+                            <div class="button-group" style="margin-top: 24px;">
+                                <button class="btn btn-success" id="applyColumnSettings"><i class="fas fa-check"></i> تایید و ادامه</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="excelPreview" style="display: none; margin-top: 24px;">
+                        <div class="card-panel">
+                            <h3 class="panel-title"><i class="fas fa-table"></i> پیش‌نمایش داده‌های Excel</h3>
+                            <div class="table-wrapper">
+                                <table class="data-table" id="excelDataTable"></table>
+                            </div>
+                            <div class="form-hint">تعداد کل رکوردها: <span id="totalRecords">۰</span></div>
+                        </div>
+                    </div>
+                    
+                    <div class="button-group">
+                        <button class="btn btn-primary" id="gotoSchoolInfoBtn"><i class="fas fa-arrow-left"></i> ادامه به اطلاعات آموزشگاه</button>
+                    </div>
+                </div>
+
+                <!-- تب 2: اطلاعات آموزشگاه -->
+                <div class="tab-pane" id="tab-school-info">
+                    <div class="tab-header">
+                        <h2><i class="fas fa-school"></i> اطلاعات آموزشگاه</h2>
+                        <p>کدهای آموزشگاه خود را وارد کنید (مطابق با سامانه سیدا)</p>
+                    </div>
+                    <div class="info-card">
+                        <i class="fas fa-info-circle"></i>
+                        <div><strong>نکته مهم:</strong><p>این اطلاعات برای دریافت تصاویر دانش‌آموزان از سامانه سیدا استفاده می‌شود.</p></div>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label required"><i class="fas fa-map-marker-alt"></i> کد استان</label>
+                            <input type="text" id="provinceCode" class="form-input" placeholder="۱۶" value="16" maxlength="2">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label required"><i class="fas fa-map-pin"></i> کد منطقه</label>
+                            <input type="text" id="areaCode" class="form-input" placeholder="۱۶۷۰" value="1670" maxlength="4">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label required"><i class="fas fa-school"></i> کد آموزشگاه</label>
+                            <input type="text" id="schoolCode" class="form-input" placeholder="۵۴۱۳۰۸۰۸" value="54130808" maxlength="8">
+                        </div>
+                    </div>
+                    <div class="button-group">
+                        <button class="btn btn-primary" id="saveSchoolInfoBtn"><i class="fas fa-save"></i> ذخیره و ادامه</button>
+                    </div>
+                </div>
+
+                <!-- تب 3: دانلود تصاویر -->
+                <div class="tab-pane" id="tab-download-images">
+                    <div class="tab-header">
+                        <h2><i class="fas fa-download"></i> دانلود تصاویر دانش‌آموزان</h2>
+                        <p>دریافت تصاویر از سامانه سیدا و ذخیره در سیستم</p>
+                    </div>
+                    <div class="stats-grid">
+                        <div class="stat-card"><div class="stat-icon"><i class="fas fa-users"></i></div><div><div class="stat-number" id="totalStudentsCount">۰</div><div class="stat-label">تعداد دانش‌آموزان</div></div></div>
+                        <div class="stat-card"><div class="stat-icon success"><i class="fas fa-check-circle"></i></div><div><div class="stat-number" id="downloadedCount">۰</div><div class="stat-label">تصاویر دانلود شده</div></div></div>
+                        <div class="stat-card"><div class="stat-icon error"><i class="fas fa-times-circle"></i></div><div><div class="stat-number" id="failedCount">۰</div><div class="stat-label">ناموفق</div></div></div>
+                    </div>
+                    <div class="card-panel">
+                        <h3 class="panel-title"><i class="fas fa-sliders-h"></i> تنظیمات دانلود</h3>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label class="form-label">تعداد دانلود همزمان</label>
+                                <select id="concurrency" class="form-select">
+                                    <option value="1">۱ تصویر</option>
+                                    <option value="3" selected>۳ تصویر</option>
+                                    <option value="5">۵ تصویر</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">فیلتر کلاس</label>
+                                <select id="downloadClassFilter" class="form-select"><option value="all">همه کلاس‌ها</option></select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="progress-container" id="progressContainer" style="display: none;">
+                        <div class="progress-header"><span><i class="fas fa-download"></i> پیشرفت</span><span class="progress-percent" id="progressPercent">۰%</span></div>
+                        <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+                        <div class="progress-stats">
+                            <span><i class="fas fa-check-circle"></i> <span id="progressSuccess">۰</span></span>
+                            <span><i class="fas fa-times-circle"></i> <span id="progressError">۰</span></span>
+                            <span><i class="fas fa-clock"></i> <span id="progressPending">۰</span></span>
+                        </div>
+                    </div>
+
+                    <div class="button-group">
+                        <button class="btn btn-success" id="startDownloadBtn"><i class="fas fa-play"></i> شروع دانلود</button>
+                        <button class="btn btn-error" id="stopDownloadBtn" disabled><i class="fas fa-stop"></i> توقف</button>
+                        <button class="btn btn-primary" id="gotoAlbumBtn"><i class="fas fa-arrow-left"></i> رفتن به طراحی آلبوم</button>
+                    </div>
+                </div>
+
+                <!-- تب 4: طراحی آلبوم هوشمند -->
+                <div class="tab-pane" id="tab-album-design">
+                    <div class="designer-container">
+                        <div class="designer-toolbar">
+                            <div class="toolbar-group">
+                                <button class="toolbar-btn active" data-element="class-select"><i class="fas fa-graduation-cap"></i><span>انتخاب کلاس</span></button>
+                                <button class="toolbar-btn" data-element="layout"><i class="fas fa-grid"></i><span>چیدمان</span></button>
+                                <button class="toolbar-btn" data-element="appearance"><i class="fas fa-palette"></i><span>ظاهر</span></button>
+                            </div>
+                            <div class="toolbar-actions">
+                                <button class="btn btn-sm btn-outline" id="resetDesignBtn"><i class="fas fa-undo"></i><span>بازنشانی</span></button>
+                                <button class="btn btn-sm btn-primary" id="saveDesignBtn"><i class="fas fa-save"></i><span>ذخیره</span></button>
+                            </div>
+                        </div>
+
+                        <div class="designer-split">
+                            <div class="designer-settings">
+                                <div class="settings-header">
+                                    <h3><i class="fas fa-sliders-h"></i> تنظیمات</h3>
+                                </div>
+                                <div class="settings-content">
+                                    <div class="element-settings active" data-element="class-select">
+                                        <h4><i class="fas fa-graduation-cap"></i> انتخاب کلاس برای طراحی</h4>
+                                        <div class="settings-group">
+                                            <label>کلاس مورد نظر</label>
+                                            <select id="selectedClass" class="setting-select">
+                                                <option value="">-- ابتدا داده‌ها را بارگذاری کنید --</option>
+                                            </select>
+                                        </div>
+                                        <div class="settings-group">
+                                            <label><input type="checkbox" id="showTitle" checked> نمایش عنوان کلاس در بالای برگه</label>
+                                        </div>
+                                        <div class="settings-group" id="customTitleGroup">
+                                            <label>عنوان دلخواه (اختیاری)</label>
+                                            <input type="text" id="customTitle" class="setting-input" placeholder="در صورت تمایل عنوان دلخواه وارد کنید">
+                                        </div>
+                                        <div class="info-card" style="margin-top: 10px; padding: 10px;">
+                                            <i class="fas fa-info-circle"></i>
+                                            <div style="font-size: 0.8rem;">تعداد دانش‌آموزان این کلاس: <strong id="selectedClassCount">0</strong> نفر</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="element-settings" data-element="layout">
+                                        <h4><i class="fas fa-grid"></i> تنظیمات چیدمان هوشمند</h4>
+                                        <div class="settings-group">
+                                            <label>حاشیه صفحه (mm)</label>
+                                            <div class="number-control">
+                                                <input type="range" id="pageMargin" min="5" max="25" value="15" step="1">
+                                                <input type="number" id="pageMarginNum" class="number-input" value="15" step="1">
+                                                <span class="unit">mm</span>
+                                            </div>
+                                        </div>
+                                        <div class="settings-group">
+                                            <label>فاصله بین کاشی‌ها (mm)</label>
+                                            <div class="number-control">
+                                                <input type="range" id="tileGap" min="2" max="20" value="10" step="1">
+                                                <input type="number" id="tileGapNum" class="number-input" value="10" step="1">
+                                                <span class="unit">mm</span>
+                                            </div>
+                                        </div>
+                                        <div class="settings-group">
+                                            <label>حداقل فاصله از عنوان (mm)</label>
+                                            <div class="number-control">
+                                                <input type="range" id="titleMargin" min="5" max="30" value="15" step="1">
+                                                <input type="number" id="titleMarginNum" class="number-input" value="15" step="1">
+                                                <span class="unit">mm</span>
+                                            </div>
+                                        </div>
+                                        <div class="info-card" style="margin-top: 10px; padding: 10px;">
+                                            <i class="fas fa-calculator"></i>
+                                            <div style="font-size: 0.8rem;" id="layoutInfo">چیدمان بهینه: در حال محاسبه...</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="element-settings" data-element="appearance">
+                                        <h4><i class="fas fa-palette"></i> تنظیمات ظاهر</h4>
+                                        <div class="settings-group">
+                                            <label>رنگ پس‌زمینه برگه</label>
+                                            <input type="color" id="pageBgColor" value="#ffffff" class="setting-input">
+                                        </div>
+                                        <div class="settings-group">
+                                            <label>رنگ پس‌زمینه کاشی</label>
+                                            <input type="color" id="tileBgColor" value="#f8fafc" class="setting-input">
+                                        </div>
+                                        <div class="settings-group">
+                                            <label>سایه کاشی</label>
+                                            <select id="tileShadow" class="setting-select">
+                                                <option value="none">بدون سایه</option>
+                                                <option value="sm" selected>سایه نرم</option>
+                                                <option value="md">سایه متوسط</option>
+                                            </select>
+                                        </div>
+                                        <div class="settings-group">
+                                            <label>گردی گوشه تصویر (px)</label>
+                                            <div class="number-control">
+                                                <input type="range" id="imageRadius" min="0" max="30" value="12" step="1">
+                                                <input type="number" id="imageRadiusNum" class="number-input" value="12" step="1">
+                                                <span class="unit">px</span>
+                                            </div>
+                                        </div>
+                                        <div class="settings-group">
+                                            <label>اندازه فونت نام (px)</label>
+                                            <div class="number-control">
+                                                <input type="range" id="nameFontSize" min="10" max="20" value="13" step="1">
+                                                <input type="number" id="nameFontSizeNum" class="number-input" value="13" step="1">
+                                                <span class="unit">px</span>
+                                            </div>
+                                        </div>
+                                        <div class="settings-group">
+                                            <label>رنگ متن نام</label>
+                                            <input type="color" id="nameColor" value="#1e293b" class="setting-input">
+                                        </div>
+                                        <div class="settings-group">
+                                            <label>اندازه فونت عنوان کلاس (px)</label>
+                                            <div class="number-control">
+                                                <input type="range" id="titleFontSize" min="16" max="40" value="24" step="1">
+                                                <input type="number" id="titleFontSizeNum" class="number-input" value="24" step="1">
+                                                <span class="unit">px</span>
+                                            </div>
+                                        </div>
+                                        <div class="settings-group">
+                                            <label>رنگ عنوان کلاس</label>
+                                            <input type="color" id="titleColor" value="#0ea5e9" class="setting-input">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="album-preview-container">
+                                <div class="preview-header">
+                                    <span><i class="fas fa-eye"></i> پیش‌نمایش زنده آلبوم</span>
+                                    <span class="preview-size">A4 (۲۱۰ × ۲۹۷ mm)</span>
+                                </div>
+                                <div class="live-preview-wrapper" id="livePreviewWrapper">
+                                    <div class="preview-page" id="albumPreviewContent">
+                                        <div class="empty-preview">
+                                            <i class="fas fa-images"></i>
+                                            <p>لطفاً ابتدا کلاس مورد نظر را انتخاب کنید</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="preview-footer">
+                                    <span><i class="fas fa-chart-line"></i> چیدمان هوشمند داینامیک</span>
+                                    <span><i class="fas fa-arrows-alt"></i> هر کلاس دقیقاً در یک برگه</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="button-group" style="margin-top: 20px;">
+                        <button class="btn btn-success" id="printAlbumBtn"><i class="fas fa-print"></i> چاپ مستقیم</button>
+                        <button class="btn btn-primary" id="downloadAlbumPdfBtn"><i class="fas fa-file-pdf"></i> دانلود PDF</button>
+                    </div>
+                </div>
+
+                <!-- تب 5: راهنما -->
+                <div class="tab-pane" id="tab-help">
+                    <div class="tab-header">
+                        <h2><i class="fas fa-question-circle"></i> راهنمای استفاده</h2>
+                        <p>آموزش گام به گام کار با سیستم آلبوم کلاسی هوشمند</p>
+                    </div>
+                    <div class="steps-container">
+                        <div class="step"><div class="step-num">۱</div><div><strong>آپلود Excel</strong><p>فایل Excel حاوی اطلاعات دانش‌آموزان را آپلود کنید.</p></div></div>
+                        <div class="step"><div class="step-num">۲</div><div><strong>اطلاعات آموزشگاه</strong><p>کدهای استان، منطقه و آموزشگاه را وارد کنید.</p></div></div>
+                        <div class="step"><div class="step-num">۳</div><div><strong>دانلود تصاویر</strong><p>با کلیک روی "شروع دانلود"، تصاویر دریافت می‌شوند.</p></div></div>
+                        <div class="step"><div class="step-num">۴</div><div><strong>طراحی آلبوم</strong><p>کلاس مورد نظر را انتخاب کنید. سیستم چیدمان بهینه را محاسبه می‌کند.</p></div></div>
+                        <div class="step"><div class="step-num">۵</div><div><strong>چاپ آلبوم</strong><p>با کلیک روی "چاپ مستقیم" یا "دانلود PDF"، آلبوم چاپ می‌شود.</p></div></div>
+                    </div>
+                    <div class="info-card">
+                        <i class="fas fa-microchip"></i>
+                        <div><strong>الگوریتم هوشمند:</strong> سیستم با استفاده از محاسبات ریاضی، بهترین تعداد سطر و ستون را برای هر کلاس پیدا می‌کند.</div>
+                    </div>
+                </div>
+            </div>
+
+            <footer class="content-footer">
+                <div class="system-status">
+                    <div class="status-indicator"><div class="status-dot"></div><span>سیستم آماده به کار</span></div>
+                    <div class="version">نسخه ۳.۰ - آلبوم کلاسی هوشمند</div>
+                </div>
+            </footer>
+        </main>
+    </div>
+
+    <!-- دکمه‌های موبایل در فوتر -->
+    <div class="mobile-footer-actions" id="mobileFooterActions">
+        <button class="btn btn-outline mobile-action-btn" id="mobileHomeBtn">
+            <i class="fas fa-home"></i>
+            <span>خانه</span>
+        </button>
+        <button class="btn btn-outline mobile-action-btn" id="mobileHelpBtn">
+            <i class="fas fa-question-circle"></i>
+            <span>راهنما</span>
+        </button>
+        <button class="btn btn-primary mobile-action-btn" id="mobileResetBtn">
+            <i class="fas fa-redo"></i>
+            <span>شروع مجدد</span>
+        </button>
+    </div>
+
+    <div class="modal-overlay" id="imageModal">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-title">پیش‌نمایش تصویر</div>
+                <button class="modal-close" id="modalClose">&times;</button>
+            </div>
+            <div class="modal-body">
+                <img id="modalImage" alt="پیش‌نمایش تصویر">
+            </div>
+        </div>
+    </div>
+    <div class="notification-container" id="notificationContainer"></div>
+
+    <script src="./assets/js/xlsx.full.min.js"></script>
+    <script src="./assets/js/html2pdf.bundle.min.js"></script>
+    <script src="./assets/js/script.js"></script>
+</body>
+</html>

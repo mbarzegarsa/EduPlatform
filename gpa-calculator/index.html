@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <meta name="theme-color" content="#0f172a">
+    <title>محاسبه‌گر معدل پیشرفته | سامانه هوشمند محاسبه معدل</title>
+    <meta name="description" content="سیستم پیشرفته محاسبه معدل با فرمول استاندارد آموزش و پرورش - نسخه ۳.۰">
+    <meta name="keywords" content="محاسبه معدل, تک ماده, امتحانات نهایی, معدل خرداد, معدل تابستان">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="./assets/css/all.min.css">
+    
+    <!-- CSS اصلی -->
+    <link rel="stylesheet" href="./assets/css/gpa-calculator.css">
+</head>
+<body>
+    <!-- هدر موبایل (فقط در موبایل نمایش داده می‌شود) -->
+    <div class="mobile-header" id="mobileHeader">
+        <button class="mobile-menu-btn" id="mobileMenuBtn">
+            <i class="fas fa-bars"></i>
+        </button>
+        <div class="mobile-logo">
+            <i class="fas fa-calculator"></i>
+            <span>محاسبه‌گر معدل</span>
+        </div>
+        <div class="mobile-header-spacer"></div>
+    </div>
+    
+    <!-- ماسک overlay برای بستن منو در موبایل -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    
+    <div class="app-container">
+        <!-- ========== SIDEBAR ========== -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-calculator"></i>
+                    </div>
+                    <span>محاسبه‌گر معدل</span>
+                </div>
+                <button class="sidebar-close-btn" id="sidebarCloseBtn">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <button class="nav-item active" data-tab="academic-info">
+                    <i class="fas fa-graduation-cap"></i>
+                    <span>اطلاعات تحصیلی</span>
+                </button>
+                <button class="nav-item" data-tab="summer-courses">
+                    <i class="fas fa-sun"></i>
+                    <span>دروس تابستانی</span>
+                </button>
+                <button class="nav-item" data-tab="results">
+                    <i class="fas fa-chart-line"></i>
+                    <span>نتایج محاسبه</span>
+                </button>
+                <button class="nav-item" data-tab="settings">
+                    <i class="fas fa-cogs"></i>
+                    <span>تنظیمات</span>
+                </button>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <div class="user-profile">
+                    <div class="avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="user-info">
+                        <div class="username">کاربر سیستم</div>
+                        <div class="role">دانش‌آموز / مشاور</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- ========== MAIN CONTENT ========== -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="content-header">
+                <div class="header-title">
+                    <h1>
+                        <i class="fas fa-calculator"></i>
+                        محاسبه‌گر معدل هوشمند
+                    </h1>
+                    <p>سیستم پیشرفته محاسبه معدل با فرمول استاندارد آموزش و پرورش</p>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-outline" id="homeBtn">
+                        <i class="fas fa-home"></i>
+                        خانه
+                    </button>
+                    <button class="btn btn-outline" id="helpBtn">
+                        <i class="fas fa-question-circle"></i>
+                        <span>راهنما</span>
+                    </button>
+                    <button class="btn btn-primary" id="newCalculationBtn">
+                        <i class="fas fa-file-circle-plus"></i>
+                        <span>محاسبه جدید</span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Content Area -->
+            <div class="content-area">
+                <!-- ========== TAB: ACADEMIC INFO ========== -->
+                <div class="tab-pane active" id="tab-academic-info">
+                    <div class="tab-header">
+                        <h2>
+                            <i class="fas fa-graduation-cap"></i>
+                            اطلاعات تحصیلی
+                        </h2>
+                        <p>لطفاً رشته و پایه تحصیلی خود را انتخاب کنید</p>
+                    </div>
+                    
+                    <div class="card-panel">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label class="form-label required" for="discipline">
+                                    <i class="fas fa-book"></i>
+                                    رشته تحصیلی
+                                </label>
+                                <select id="discipline" class="form-select">
+                                    <option value="علوم تجربی">علوم تجربی</option>
+                                    <option value="ریاضی فیزیک">ریاضی فیزیک</option>
+                                    <option value="علوم انسانی">علوم انسانی</option>
+                                    <option value="علوم و معارف اسلامی">علوم و معارف اسلامی</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label required" for="grade">
+                                    <i class="fas fa-layer-group"></i>
+                                    پایه تحصیلی
+                                </label>
+                                <select id="grade" class="form-select">
+                                    <option value="دهم">پایه دهم</option>
+                                    <option value="یازدهم">پایه یازدهم</option>
+                                    <option value="دوازدهم">پایه دوازدهم</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label required" for="june-gpa">
+                                    <i class="fas fa-chart-line"></i>
+                                    معدل خرداد
+                                </label>
+                                <input type="number" id="june-gpa" class="form-input" placeholder="۱۷.۵۰" step="0.01" min="0" max="20">
+                                <div class="form-hint">معدل پایه جاری در خردادماه</div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label required" for="min-gpa">
+                                    <i class="fas fa-bullseye"></i>
+                                    حداقل معدل مورد نیاز
+                                </label>
+                                <input type="number" id="min-gpa" class="form-input" value="12" step="0.01" min="0" max="20">
+                                <div class="form-hint">حداقل معدل برای قبولی در شرط علمی</div>
+                            </div>
+                            
+                            <div class="form-group full-width" id="units-info-container">
+                                <div class="info-card">
+                                    <i class="fas fa-info-circle"></i>
+                                    <div id="units-info">واحدهای پایه جاری: ۳۵ واحد</div>
+                                </div>
+                            </div>
+
+                            <!-- قوانین خاص پایه -->
+                            <div class="form-group full-width" id="grade-specific-rules"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="button-group">
+                        <button class="btn btn-primary" id="gotoSummerBtn">
+                            <i class="fas fa-arrow-left"></i>
+                            ادامه به دروس تابستانی
+                        </button>
+                    </div>
+                </div>
+
+                <!-- ========== TAB: SUMMER COURSES ========== -->
+                <div class="tab-pane" id="tab-summer-courses">
+                    <div class="tab-header">
+                        <h2>
+                            <i class="fas fa-sun"></i>
+                            دروس تابستانی
+                        </h2>
+                        <p>درس‌هایی که در تابستان مجدداً امتحان داده‌اید را وارد کنید</p>
+                    </div>
+                    
+                    <div class="card-panel">
+                        <div class="courses-header-actions">
+                            <div class="courses-badge" id="courses-count-badge">
+                                <i class="fas fa-book-open"></i>
+                                <span>تعداد دروس: ۰</span>
+                            </div>
+                            <button class="btn btn-success" id="add-course">
+                                <i class="fas fa-plus-circle"></i>
+                                افزودن درس جدید
+                            </button>
+                        </div>
+                        
+                        <div class="courses-list" id="courses-container"></div>
+                        
+                        <div class="empty-state" id="empty-state">
+                            <i class="fas fa-plus-circle"></i>
+                            <h3>هیچ درسی اضافه نشده است</h3>
+                            <p>برای شروع محاسبه، روی دکمه "افزودن درس جدید" کلیک کنید</p>
+                        </div>
+
+                        <div class="info-card" id="summer-limit-warning" style="display: none;">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <div><span id="summer-limit-text"></span></div>
+                        </div>
+                    </div>
+                    
+                    <div class="button-group">
+                        <button class="btn btn-primary" id="gotoResultsBtn">
+                            <i class="fas fa-arrow-left"></i>
+                            رفتن به نتایج
+                        </button>
+                    </div>
+                </div>
+
+                <!-- ========== TAB: RESULTS ========== -->
+                <div class="tab-pane" id="tab-results">
+                    <div class="tab-header">
+                        <h2>
+                            <i class="fas fa-chart-line"></i>
+                            نتایج محاسبه
+                        </h2>
+                        <p>مشاهده نتایج محاسبه معدل با تحلیل دقیق دروس</p>
+                    </div>
+                    
+                    <div class="results-wrapper">
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <div class="stat-icon"><i class="fas fa-calendar-alt"></i></div>
+                                <div class="stat-info">
+                                    <div class="stat-number" id="total-units">۰</div>
+                                    <div class="stat-label">مجموع واحدها</div>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon" style="background: #d97706;"><i class="fas fa-sun"></i></div>
+                                <div class="stat-info">
+                                    <div class="stat-number" id="summer-courses-count">۰</div>
+                                    <div class="stat-label">دروس تابستانی</div>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon" style="background: #0284c7;"><i class="fas fa-chart-line"></i></div>
+                                <div class="stat-info">
+                                    <div class="stat-number" id="summer-units">۰</div>
+                                    <div class="stat-label">واحدهای تابستان</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="gpa-comparison-box">
+                            <div class="gpa-result-card">
+                                <div class="gpa-result-label">معدل خرداد</div>
+                                <div class="gpa-result-value" id="current-gpa">--</div>
+                            </div>
+                            <div class="gpa-arrow-icon"><i class="fas fa-arrow-left"></i></div>
+                            <div class="gpa-result-card highlight">
+                                <div class="gpa-result-label">معدل جدید</div>
+                                <div class="gpa-result-value new" id="new-gpa">--</div>
+                            </div>
+                        </div>
+                        
+                        <div class="result-status-card" id="status-container">
+                            <div class="result-status-icon"><i class="fas fa-info-circle" id="status-icon"></i></div>
+                            <div class="result-status-content">
+                                <div class="result-status-title" id="status-title">منتظر محاسبه</div>
+                                <div class="result-status-description" id="status-description">برای مشاهده نتایج، دکمه محاسبه را بزنید</div>
+                            </div>
+                        </div>
+
+                        <div class="settings-panel" style="margin-top: 24px;">
+                            <h3><i class="fas fa-chart-pie"></i> تحلیل دقیق دروس</h3>
+                            <div id="detailed-analysis" class="analysis-container"></div>
+                        </div>
+
+                        <div class="stats-grid" style="margin-top: 20px;">
+                            <div class="stat-card">
+                                <div class="stat-icon" style="background: #d97706;"><i class="fas fa-users"></i></div>
+                                <div class="stat-info">
+                                    <div class="stat-number" id="summer-in-person">۰</div>
+                                    <div class="stat-label">واحد حضوری</div>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon" style="background: #0284c7;"><i class="fas fa-laptop"></i></div>
+                                <div class="stat-info">
+                                    <div class="stat-number" id="summer-remote">۰</div>
+                                    <div class="stat-label">واحد غیرحضوری</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="results-action-buttons">
+                            <button class="btn btn-primary" id="calculate-btn">
+                                <i class="fas fa-calculator"></i>
+                                محاسبه معدل
+                            </button>
+                            <button class="btn btn-outline" id="save-result-btn">
+                                <i class="fas fa-save"></i>
+                                ذخیره نتیجه
+                            </button>
+                            <button class="btn btn-outline" id="print-result-btn">
+                                <i class="fas fa-print"></i>
+                                چاپ نتیجه
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ========== TAB: SETTINGS ========== -->
+                <div class="tab-pane" id="tab-settings">
+                    <div class="tab-header">
+                        <h2>
+                            <i class="fas fa-cogs"></i>
+                            تنظیمات
+                        </h2>
+                        <p>مدیریت تنظیمات محاسبه‌گر معدل</p>
+                    </div>
+                    
+                    <div class="form-grid">
+                        <div class="form-group full-width">
+                            <div class="settings-panel">
+                                <h3><i class="fas fa-paint-brush"></i> تنظیمات ظاهری</h3>
+                                <div class="settings-option">
+                                    <label class="toggle-label" for="dark-mode">
+                                        <span>حالت تاریک</span>
+                                        <div class="toggle-switch">
+                                            <input type="checkbox" id="dark-mode" checked disabled>
+                                            <span class="toggle-slider"></span>
+                                        </div>
+                                    </label>
+                                </div>
+                                <div class="settings-option">
+                                    <label class="toggle-label" for="show-units">
+                                        <span>نمایش واحد دروس</span>
+                                        <div class="toggle-switch">
+                                            <input type="checkbox" id="show-units" checked>
+                                            <span class="toggle-slider"></span>
+                                        </div>
+                                    </label>
+                                </div>
+                                <div class="settings-option">
+                                    <label class="toggle-label" for="compact-mode">
+                                        <span>حالت فشرده دروس</span>
+                                        <div class="toggle-switch">
+                                            <input type="checkbox" id="compact-mode">
+                                            <span class="toggle-slider"></span>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <div class="settings-panel">
+                                <h3><i class="fas fa-database"></i> مدیریت داده‌ها</h3>
+                                <div class="settings-action-group">
+                                    <button class="btn btn-outline" id="reset-defaults">
+                                        <i class="fas fa-undo-alt"></i>
+                                        بازنشانی به پیش‌فرض
+                                    </button>
+                                    <button class="btn btn-outline" id="export-data">
+                                        <i class="fas fa-download"></i>
+                                        خروجی گرفتن
+                                    </button>
+                                    <button class="btn btn-outline" id="import-data">
+                                        <i class="fas fa-upload"></i>
+                                        بازیابی اطلاعات
+                                    </button>
+                                    <input type="file" id="import-file" accept=".json" style="display: none;">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <div class="info-card" style="flex-direction: column; align-items: flex-start;">
+                                <h3><i class="fas fa-keyboard"></i> کلیدهای میانبر</h3>
+                                <div class="shortcut-list">
+                                    <div class="shortcut-item">
+                                        <span class="shortcut-key">Ctrl + N</span>
+                                        <span class="shortcut-description">محاسبه جدید</span>
+                                    </div>
+                                    <div class="shortcut-item">
+                                        <span class="shortcut-key">Ctrl + S</span>
+                                        <span class="shortcut-description">ذخیره نتیجه</span>
+                                    </div>
+                                    <div class="shortcut-item">
+                                        <span class="shortcut-key">Ctrl + P</span>
+                                        <span class="shortcut-description">چاپ نتیجه</span>
+                                    </div>
+                                    <div class="shortcut-item">
+                                        <span class="shortcut-key">Ctrl + →</span>
+                                        <span class="shortcut-description">تب بعدی</span>
+                                    </div>
+                                    <div class="shortcut-item">
+                                        <span class="shortcut-key">Ctrl + ←</span>
+                                        <span class="shortcut-description">تب قبلی</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <div class="info-card" style="background: rgba(16, 185, 129, 0.1); border-color: #10b981;">
+                                <h3><i class="fas fa-info-circle" style="color: #10b981;"></i> درباره سیستم</h3>
+                                <p style="margin-top: 8px; line-height: 1.8;">
+                                    این سیستم بر اساس آخرین بخشنامه‌های آموزش و پرورش تا سال ۱۴۰۵ طراحی شده است.<br>
+                                    فرمول محاسبه: (مستمر۱×۱ + پایانی۱×۲ + مستمر۲×۱ + پایانی۲×۴) ÷ ۸<br>
+                                    گرد کردن: ریاضی استاندارد تا ۲ رقم اعشار<br>
+                                    نسخه ۳.۰.۰ | توسعه توسط mbrzgrsa@
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <footer class="content-footer">
+                <div class="footer-actions">
+                    <div class="navigation-buttons">
+                        <button class="btn btn-outline" id="prevTabBtn">
+                            <i class="fas fa-arrow-right"></i>
+                            قبلی
+                        </button>
+                        <button class="btn btn-primary" id="nextTabBtn">
+                            بعدی
+                            <i class="fas fa-arrow-left"></i>
+                        </button>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="btn btn-success" id="calculate-footer-btn">
+                            <i class="fas fa-calculator"></i>
+                            محاسبه
+                        </button>
+                        <button class="btn btn-outline" id="clear-all-btn">
+                            <i class="fas fa-trash"></i>
+                            پاک کردن همه
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="system-status">
+                    <div class="status-indicator">
+                        <div class="status-dot online"></div>
+                        <span>سیستم آماده به کار</span>
+                    </div>
+                    <div class="status-indicator">
+                        <div class="status-dot online"></div>
+                        <span>توسعه توسط mbrzgrsa@</span>
+                    </div>
+                    <div class="auto-save-status">
+                        <i class="fas fa-save"></i>
+                        <span>ذخیره خودکار فعال</span>
+                    </div>
+                    <div class="version">نسخه ۳.۰.۰</div>
+                </div>
+            </footer>
+        </main>
+    </div>
+
+    <!-- دکمه‌های موبایل در فوتر -->
+    <div class="mobile-footer-actions" id="mobileFooterActions">
+        <button class="btn btn-outline mobile-action-btn" id="mobileHomeBtn">
+            <i class="fas fa-home"></i>
+            <span>خانه</span>
+        </button>
+        <button class="btn btn-outline mobile-action-btn" id="mobileHelpBtn">
+            <i class="fas fa-question-circle"></i>
+            <span>راهنما</span>
+        </button>
+        <button class="btn btn-primary mobile-action-btn" id="mobileNewCalcBtn">
+            <i class="fas fa-file-circle-plus"></i>
+            <span>محاسبه جدید</span>
+        </button>
+    </div>
+
+    <!-- Notifications -->
+    <div class="notification-container" id="notificationContainer"></div>
+
+    <script src="./assets/js/gpa-calculator.js"></script>
+</body>
+</html>

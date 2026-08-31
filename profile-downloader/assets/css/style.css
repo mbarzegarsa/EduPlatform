@@ -1,0 +1,1467 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary-400: #38bdf8;
+    --primary-500: #0ea5e9;
+    --primary-600: #0284c7;
+    --success-500: #10b981;
+    --error-500: #ef4444;
+    --warning-500: #f59e0b;
+    --bg-dark: #0f172a;
+    --bg-darker: #020617;
+    --bg-card-panel: #1e293b;
+    --bg-input: #0f172a;
+    --text-primary: #f1f5f9;
+    --text-secondary: #cbd5e1;
+    --text-muted: #94a3b8;
+    --border-light: #334155;
+    --gradient-primary: linear-gradient(135deg, var(--primary-500), var(--primary-600));
+    --radius-sm: 6px;
+    --radius-base: 10px;
+    --radius-lg: 14px;
+    --radius-xl: 18px;
+    
+    --sidebar-width: 280px;
+}
+
+@font-face {
+    font-family: 'Vazir';
+    src: url('../font/Vazirmatn.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Vazir';
+    src: url('../font/Vazirmatn-Bold.woff2') format('woff2');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+* {
+    font-family: 'Vazir', 'Segoe UI', system-ui, sans-serif;
+}
+
+body {
+    background: var(--bg-dark);
+    color: var(--text-primary);
+    direction: rtl;
+    line-height: 1.5;
+    overflow-x: hidden;
+    min-height: 100vh;
+}
+
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: var(--bg-darker); border-radius: 10px; }
+::-webkit-scrollbar-thumb { background: var(--primary-600); border-radius: 10px; }
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideIn {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+}
+
+/* ========== هدر موبایل (فقط در موبایل) ========== */
+.mobile-header {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(135deg, #0f172a, #020617);
+    backdrop-filter: blur(12px);
+    padding: 10px 16px;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 1001;
+    border-bottom: 1px solid var(--border-light);
+    height: 56px;
+}
+
+.mobile-menu-btn {
+    width: 40px;
+    height: 40px;
+    background: var(--gradient-primary);
+    border: none;
+    border-radius: 10px;
+    color: white;
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.mobile-menu-btn.active {
+    background: var(--error-500);
+}
+
+.mobile-logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--primary-400);
+}
+
+.mobile-logo i {
+    font-size: 1.2rem;
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.mobile-header-spacer {
+    width: 40px;
+}
+
+/* ========== دکمه‌های موبایل در فوتر ========== */
+.mobile-footer-actions {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(15, 23, 42, 0.95);
+    backdrop-filter: blur(12px);
+    border-top: 1px solid var(--border-light);
+    padding: 10px 16px;
+    gap: 10px;
+    z-index: 1000;
+}
+
+.mobile-action-btn {
+    flex: 1;
+    justify-content: center;
+    padding: 10px 12px !important;
+    white-space: nowrap;
+}
+
+.mobile-action-btn span {
+    font-size: 0.75rem;
+}
+
+.mobile-action-btn i {
+    font-size: 1rem;
+}
+
+/* ========== سایدبار ========== */
+.sidebar {
+    width: var(--sidebar-width);
+    background: linear-gradient(180deg, #0f172a, #020617);
+    display: flex;
+    flex-direction: column;
+    border-left: 1px solid var(--border-light);
+    flex-shrink: 0;
+    height: 100vh;
+    position: sticky;
+    top: 0;
+    transition: transform 0.3s ease;
+    z-index: 1002;
+    overflow-y: auto;
+}
+
+.sidebar-header {
+    padding: 24px 20px;
+    border-bottom: 1px solid var(--border-light);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.sidebar-close-btn {
+    display: none;
+    width: 36px;
+    height: 36px;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    border-radius: 10px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-size: 1.1rem;
+    align-items: center;
+    justify-content: center;
+}
+
+.sidebar-close-btn:hover {
+    background: rgba(239, 68, 68, 0.2);
+    color: var(--error-500);
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 1rem;
+    font-weight: 800;
+}
+
+.logo-icon {
+    width: 38px;
+    height: 38px;
+    background: var(--gradient-primary);
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+.logo-icon i {
+    font-size: 1.1rem;
+}
+
+.logo span {
+    background: linear-gradient(135deg, var(--primary-400), var(--primary-500));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-size: 0.9rem;
+}
+
+.sidebar-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(4px);
+    z-index: 1001;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.sidebar-overlay.active {
+    display: block;
+    opacity: 1;
+}
+
+.sidebar-nav {
+    flex: 1;
+    padding: 20px 12px;
+    overflow-y: auto;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 12px 16px;
+    margin-bottom: 6px;
+    color: var(--text-secondary);
+    border-radius: var(--radius-base);
+    transition: all 0.2s ease;
+    cursor: pointer;
+    font-weight: 500;
+    background: none;
+    border: none;
+    font-size: 0.85rem;
+    text-align: right;
+}
+
+.nav-item:hover {
+    background: rgba(14, 165, 233, 0.15);
+    color: var(--primary-400);
+}
+
+.nav-item.active {
+    background: var(--gradient-primary);
+    color: white;
+}
+
+.nav-item i {
+    width: 24px;
+    text-align: center;
+}
+
+.sidebar-footer {
+    padding: 16px 20px;
+    border-top: 1px solid var(--border-light);
+}
+
+.user-profile {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.avatar {
+    width: 38px;
+    height: 38px;
+    background: var(--gradient-primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+.avatar i {
+    font-size: 1rem;
+}
+
+.username {
+    font-weight: 700;
+    font-size: 0.8rem;
+}
+
+.role {
+    font-size: 0.65rem;
+    color: var(--text-muted);
+}
+
+/* ========== محتوای اصلی ========== */
+.app-container {
+    display: flex;
+    min-height: 100vh;
+}
+
+.main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    width: 100%;
+    background: var(--bg-dark);
+}
+
+.content-header {
+    background: rgba(15, 23, 42, 0.95);
+    backdrop-filter: blur(12px);
+    padding: 16px 32px;
+    border-bottom: 1px solid var(--border-light);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.header-title h1 {
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: linear-gradient(135deg, var(--primary-400), var(--primary-500));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.header-title p {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    margin-top: 4px;
+}
+
+.header-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+/* ========== دکمه‌ها ========== */
+.btn {
+    padding: 15px 20px;
+    border: none;
+    border-radius: var(--radius-base);
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: inherit;
+    white-space: nowrap;
+}
+
+.btn-sm {
+    padding: 8px 14px;
+    font-size: 0.75rem;
+}
+
+.btn-primary {
+    background: var(--gradient-primary);
+    color: white;
+}
+
+.btn-primary:hover {
+    transform: translateY(-1px);
+    opacity: 0.9;
+}
+
+.btn-success {
+    background: linear-gradient(135deg, var(--success-500), #059669);
+    color: white;
+}
+
+.btn-error {
+    background: linear-gradient(135deg, var(--error-500), #dc2626);
+    color: white;
+}
+
+.btn-outline {
+    background: transparent;
+    border: 1px solid var(--border-light);
+    color: var(--text-secondary);
+}
+
+.btn-outline:hover {
+    border-color: var(--primary-500);
+    color: var(--primary-400);
+    background: rgba(14, 165, 233, 0.1);
+}
+
+.button-group {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+.button-group .btn {
+    flex: 1 1 auto;
+    justify-content: center;
+}
+
+.content-area {
+    flex: 1;
+    padding: 24px 32px;
+    overflow-y: auto;
+}
+
+.tab-pane {
+    display: none;
+    animation: fadeIn 0.3s ease;
+}
+
+.tab-pane.active {
+    display: block;
+}
+
+.tab-header {
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.tab-header::after {
+    content: '';
+    position: absolute;
+    bottom: -12px;
+    right: 0;
+    width: 60px;
+    height: 3px;
+    background: var(--gradient-primary);
+    border-radius: 10px;
+}
+
+.tab-header h2 {
+    font-size: 1.3rem;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.tab-header p {
+    color: var(--text-muted);
+    margin-top: 8px;
+    font-size: 0.8rem;
+}
+
+.card-panel {
+    background: var(--bg-card-panel);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.panel-title {
+    font-size: 1rem;
+    margin-bottom: 16px;
+    color: var(--primary-400);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group.full-width {
+    grid-column: 1 / -1;
+}
+
+.form-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-secondary);
+}
+
+.form-label.required::after {
+    content: "*";
+    color: var(--error-500);
+}
+
+.form-input,
+.form-select {
+    padding: 10px 14px;
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-base);
+    background: var(--bg-input);
+    color: var(--text-primary);
+    font-family: inherit;
+    font-size: 0.85rem;
+}
+
+.form-input:focus,
+.form-select:focus {
+    outline: none;
+    border-color: var(--primary-500);
+}
+
+input[type="color"] {
+    padding: 4px;
+    height: 42px;
+    cursor: pointer;
+}
+
+.form-hint {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    margin-top: 6px;
+}
+
+.column-selector {
+    margin-bottom: 20px;
+}
+
+.column-selector h4 {
+    font-size: 0.85rem;
+    margin-bottom: 10px;
+    color: var(--text-secondary);
+}
+
+.column-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.column-badge {
+    background: var(--bg-input);
+    border: 1px solid var(--border-light);
+    border-radius: 30px;
+    padding: 6px 14px;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.column-badge:hover {
+    border-color: var(--primary-500);
+    color: var(--primary-400);
+}
+
+.column-badge.selected {
+    background: var(--gradient-primary);
+    color: white;
+}
+
+.table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin: 0 -4px;
+    padding: 0 4px;
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.75rem;
+    min-width: 500px;
+}
+
+.data-table th,
+.data-table td {
+    padding: 10px 8px;
+    border: 1px solid var(--border-light);
+    text-align: right;
+}
+
+.data-table th {
+    background: var(--bg-card-panel);
+    color: var(--primary-400);
+    font-weight: 600;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.stat-card {
+    background: var(--bg-card-panel);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-lg);
+    padding: 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.stat-icon {
+    width: 44px;
+    height: 44px;
+    background: var(--gradient-primary);
+    border-radius: var(--radius-base);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    color: white;
+}
+
+.stat-icon.success {
+    background: linear-gradient(135deg, var(--success-500), #059669);
+}
+
+.stat-icon.error {
+    background: linear-gradient(135deg, var(--error-500), #dc2626);
+}
+
+.stat-number {
+    font-size: 1.3rem;
+    font-weight: 800;
+}
+
+.stat-label {
+    font-size: 0.65rem;
+    color: var(--text-muted);
+}
+
+.progress-container {
+    background: var(--bg-card-panel);
+    border-radius: var(--radius-lg);
+    padding: 16px;
+    margin: 16px 0;
+}
+
+.progress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    font-size: 0.8rem;
+}
+
+.progress-bar {
+    height: 8px;
+    background: var(--bg-input);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: var(--gradient-primary);
+    width: 0%;
+    transition: width 0.3s ease;
+}
+
+.progress-stats {
+    display: flex;
+    gap: 16px;
+    margin-top: 12px;
+    font-size: 0.7rem;
+    flex-wrap: wrap;
+}
+
+.progress-percent {
+    background: var(--gradient-primary);
+    padding: 2px 10px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+}
+
+/* ========== سیستم طراحی آلبوم ========== */
+.designer-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    height: auto;
+    min-height: 500px;
+}
+
+.designer-toolbar {
+    background: var(--bg-card-panel);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-lg);
+    padding: 10px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    flex-shrink: 0;
+}
+
+.toolbar-group {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.toolbar-btn {
+    background: var(--bg-input);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-base);
+    padding: 6px 12px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 0.75rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.toolbar-btn i {
+    font-size: 0.8rem;
+}
+
+.toolbar-btn:hover {
+    border-color: var(--primary-500);
+    color: var(--primary-400);
+}
+
+.toolbar-btn.active {
+    background: var(--gradient-primary);
+    border-color: var(--primary-500);
+    color: white;
+}
+
+.toolbar-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.designer-split {
+    display: flex;
+    gap: 16px;
+    flex: 1;
+    min-height: 0;
+    flex-direction: row;
+}
+
+.designer-settings {
+    width: 340px;
+    background: var(--bg-card-panel);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-lg);
+    overflow-y: auto;
+    flex-shrink: 0;
+    max-height: 550px;
+}
+
+.settings-header {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border-light);
+    position: sticky;
+    top: 0;
+    background: var(--bg-card-panel);
+    z-index: 10;
+}
+
+.settings-header h3 {
+    font-size: 0.9rem;
+    color: var(--primary-400);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.settings-content {
+    padding: 16px;
+}
+
+.element-settings {
+    display: none;
+}
+
+.element-settings.active {
+    display: block;
+}
+
+.element-settings h4 {
+    font-size: 0.85rem;
+    margin-bottom: 12px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border-light);
+    color: var(--primary-400);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.settings-group {
+    margin-bottom: 14px;
+}
+
+.settings-group label {
+    display: block;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    margin-bottom: 6px;
+}
+
+.number-control {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.number-control input[type="range"] {
+    flex: 1;
+    height: 4px;
+    -webkit-appearance: none;
+    background: var(--bg-input);
+    border-radius: 5px;
+}
+
+.number-control input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--primary-500);
+    cursor: pointer;
+}
+
+.number-control .number-input {
+    width: 60px;
+    padding: 5px 8px;
+    background: var(--bg-input);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-base);
+    color: var(--text-primary);
+    font-size: 0.75rem;
+    text-align: center;
+}
+
+.number-control .unit {
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    min-width: 25px;
+}
+
+.setting-input,
+.setting-select {
+    width: 100%;
+    padding: 8px 12px;
+    background: var(--bg-input);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-base);
+    color: var(--text-primary);
+    font-size: 0.8rem;
+}
+
+/* پنل پیش‌نمایش آلبوم */
+.album-preview-container {
+    flex: 1;
+    background: var(--bg-darker);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-lg);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    min-width: 0;
+}
+
+.preview-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--border-light);
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    flex-shrink: 0;
+    background: var(--bg-card-panel);
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.preview-size {
+    font-family: monospace;
+    background: var(--bg-input);
+    padding: 3px 8px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+}
+
+.live-preview-wrapper {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 16px;
+    overflow: auto;
+    background: #e2e8f0;
+    min-height: 400px;
+}
+
+.preview-page {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    width: 100%;
+    max-width: 750px;
+}
+
+.preview-footer {
+    padding: 8px 16px;
+    border-top: 1px solid var(--border-light);
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    flex-shrink: 0;
+    background: var(--bg-card-panel);
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.empty-preview {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--text-muted);
+}
+
+.empty-preview i {
+    font-size: 40px;
+    margin-bottom: 12px;
+    display: block;
+    opacity: 0.5;
+}
+
+/* ========== استایل صفحه آلبوم ========== */
+.album-page {
+    background: white;
+    width: 100%;
+    min-height: 297mm;
+    position: relative;
+    page-break-after: avoid;
+    box-sizing: border-box;
+}
+
+.students-grid {
+    display: grid;
+    justify-items: center;
+    align-items: start;
+}
+
+.student-card {
+    width: 100%;
+    text-align: center;
+}
+
+.student-photo {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.student-photo img {
+    object-fit: cover;
+    object-position: center;
+}
+
+.student-name {
+    padding: 6px 4px 8px 4px;
+    font-weight: 500;
+}
+
+/* ========== کارت اطلاعات ========== */
+.info-card {
+    background: rgba(14, 165, 233, 0.1);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-base);
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 30px 0px 25px 0px;
+    font-size: 0.8rem;
+}
+
+.info-card i {
+    font-size: 1.1rem;
+    color: var(--primary-400);
+    flex-shrink: 0;
+}
+
+/* ========== مراحل راهنما ========== */
+.steps-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.step {
+    display: flex;
+    gap: 12px;
+    background: var(--bg-card-panel);
+    border-radius: var(--radius-lg);
+    padding: 14px;
+    align-items: flex-start;
+}
+
+.step-num {
+    width: 32px;
+    height: 32px;
+    background: var(--gradient-primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    flex-shrink: 0;
+    color: white;
+    font-size: 0.8rem;
+}
+
+.step strong {
+    font-size: 0.85rem;
+}
+
+.step p {
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    margin-top: 4px;
+}
+
+/* ========== فوتر ========== */
+.content-footer {
+    background: rgba(15, 23, 42, 0.95);
+    padding: 10px 24px;
+    border-top: 1px solid var(--border-light);
+    flex-shrink: 0;
+    margin-top: auto;
+}
+
+.system-status {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    font-size: 0.7rem;
+    flex-wrap: wrap;
+}
+
+.status-indicator {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--success-500);
+    animation: pulse 2s infinite;
+    display: inline-block;
+}
+
+.version {
+    font-size: 0.65rem;
+    color: var(--text-muted);
+}
+
+/* ========== مودال ========== */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(8px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal-overlay.active {
+    display: flex;
+}
+
+.modal {
+    background: var(--bg-card-panel);
+    border-radius: var(--radius-lg);
+    max-width: 90vw;
+    max-height: 90vh;
+    overflow: hidden;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.modal-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.modal-close {
+    width: 32px;
+    height: 32px;
+    background: var(--bg-input);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+}
+
+.modal-body {
+    padding: 16px;
+}
+
+.modal-body img {
+    max-width: 100%;
+    max-height: 70vh;
+}
+
+/* ========== اعلان‌ها ========== */
+.notification-container {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 380px;
+}
+
+.notification {
+    background: var(--bg-card-panel);
+    border-right: 4px solid var(--primary-500);
+    border-radius: var(--radius-base);
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    animation: slideIn 0.3s;
+    font-size: 0.8rem;
+}
+
+.notification.success {
+    border-right-color: var(--success-500);
+}
+
+.notification.error {
+    border-right-color: var(--error-500);
+}
+
+.notification.warning {
+    border-right-color: var(--warning-500);
+}
+
+.notification-close {
+    margin-right: auto;
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-size: 1.1rem;
+    padding: 0 4px;
+}
+
+/* ========== استایل چاپ ========== */
+@media print {
+    .sidebar, .content-header, .content-footer, .mobile-header,
+    .mobile-footer-actions, .button-group, .btn, .notification-container,
+    .modal-overlay, .card-panel, .info-card, .stats-grid, .tab-header::after,
+    .header-actions, .designer-toolbar, .designer-settings,
+    .preview-header, .preview-footer, .sidebar-overlay,
+    .album-preview-container {
+        display: none !important;
+    }
+    
+    .main-content { margin: 0; padding: 0; }
+    .content-area { padding: 0; }
+    .tab-pane { display: block !important; }
+    .album-page { page-break-after: avoid; margin: 0; padding: 0; width: 100%; min-height: 100%; }
+    
+    * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        color-adjust: exact !important;
+    }
+}
+
+/* ========== مدیا کوئری دسکتاپ ========== */
+@media (min-width: 769px) {
+    .mobile-header {
+        display: none !important;
+    }
+    
+    .mobile-footer-actions {
+        display: none !important;
+    }
+    
+    .sidebar {
+        transform: translateX(0) !important;
+    }
+    
+    .sidebar-overlay {
+        display: none !important;
+    }
+    
+    .sidebar-close-btn {
+        display: none !important;
+    }
+}
+
+/* ========== مدیا کوئری موبایل ========== */
+@media (max-width: 768px) {
+    .mobile-header {
+        display: flex;
+    }
+    
+    .mobile-footer-actions {
+        display: flex;
+    }
+    
+    .sidebar {
+        position: fixed;
+        top: 0;
+        right: 0;
+        height: 100vh;
+        z-index: 1002;
+        transform: translateX(100%);
+        width: 280px;
+    }
+    
+    .sidebar.open {
+        transform: translateX(0);
+    }
+    
+    .sidebar-close-btn {
+        display: flex;
+    }
+    
+    .main-content {
+        padding-top: 56px;
+        padding-bottom: 70px;
+    }
+    
+    .content-header {
+        display: none;
+    }
+    
+    .content-area {
+        padding: 16px;
+    }
+    
+    .tab-header h2 {
+        font-size: 1.1rem;
+    }
+    
+    .card-panel {
+        padding: 14px;
+    }
+    
+    .button-group {
+        flex-direction: column;
+    }
+    
+    .button-group .btn {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .form-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+    
+    .stats-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+    
+    .stat-card {
+        padding: 10px;
+    }
+    
+    .stat-icon {
+        width: 36px;
+        height: 36px;
+        font-size: 1rem;
+    }
+    
+    .stat-number {
+        font-size: 1.1rem;
+    }
+    
+    .designer-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .toolbar-group {
+        justify-content: center;
+    }
+    
+    .toolbar-actions {
+        justify-content: center;
+    }
+    
+    .designer-split {
+        flex-direction: column;
+    }
+    
+    .designer-settings {
+        width: 100%;
+        max-height: 380px;
+    }
+    
+    .album-preview-container {
+        min-height: 400px;
+    }
+    
+    .live-preview-wrapper {
+        min-height: 350px;
+        padding: 12px;
+    }
+    
+    .notification-container {
+        top: 66px;
+        left: 10px;
+        right: 10px;
+        max-width: none;
+    }
+    
+    .content-footer {
+        display: none;
+    }
+    
+    .step {
+        padding: 12px;
+    }
+    
+    .step-num {
+        width: 28px;
+        height: 28px;
+        font-size: 0.7rem;
+    }
+    
+    .column-badge {
+        padding: 4px 12px;
+        font-size: 0.7rem;
+    }
+}
+
+/* موبایل‌های خیلی کوچک */
+@media (max-width: 480px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .toolbar-group {
+        gap: 4px;
+    }
+    
+    .toolbar-btn {
+        padding: 5px 8px;
+        font-size: 0.65rem;
+    }
+    
+    .toolbar-btn i {
+        font-size: 0.7rem;
+    }
+    
+    .toolbar-btn span {
+        display: none;
+    }
+    
+    .toolbar-btn i {
+        margin: 0;
+    }
+    
+    .number-control .number-input {
+        width: 50px;
+    }
+    
+    .info-card {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .info-card i {
+        font-size: 1.3rem;
+    }
+}
+
+/* حالت افقی موبایل */
+@media (max-width: 768px) and (orientation: landscape) {
+    .main-content {
+        padding-top: 56px;
+        padding-bottom: 70px;
+    }
+    
+    .designer-settings {
+        max-height: 280px;
+    }
+    
+    .album-preview-container {
+        min-height: 280px;
+    }
+    
+    .live-preview-wrapper {
+        min-height: 220px;
+    }
+}

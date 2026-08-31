@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="fa">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <meta name="theme-color" content="#0f172a">
+    <title>سیستم حرفه‌ای صدور و چاپ برگه شماره صندلی - طراحی پیشرفته</title>
+    <link rel="stylesheet" href="./assets/css/all.min.css">
+    <link rel="stylesheet" href="./assets/css/style.css">
+</head>
+<body>
+    <!-- هدر موبایل (فقط در موبایل نمایش داده می‌شود) -->
+    <div class="mobile-header" id="mobileHeader">
+        <button class="mobile-menu-btn" id="mobileMenuBtn">
+            <i class="fas fa-bars"></i>
+        </button>
+        <div class="mobile-logo">
+            <i class="fas fa-chair"></i>
+            <span>صدور شماره صندلی</span>
+        </div>
+        <div class="mobile-header-spacer"></div>
+    </div>
+    
+    <!-- ماسک overlay برای بستن منو در موبایل -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    
+    <div class="app-container">
+        <!-- سایدبار دسکتاپ و موبایل -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <div class="logo-icon"><i class="fas fa-chair"></i></div>
+                    <span>صدور شماره صندلی</span>
+                </div>
+                <button class="sidebar-close-btn" id="sidebarCloseBtn">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <nav class="sidebar-nav">
+                <button class="nav-item active" data-tab="excel-upload">
+                    <i class="fas fa-file-excel"></i>
+                    <span>آپلود Excel</span>
+                </button>
+                <button class="nav-item" data-tab="school-info">
+                    <i class="fas fa-school"></i>
+                    <span>اطلاعات آموزشگاه</span>
+                </button>
+                <button class="nav-item" data-tab="download-images">
+                    <i class="fas fa-download"></i>
+                    <span>دانلود تصاویر</span>
+                </button>
+                <button class="nav-item" data-tab="number-rules">
+                    <i class="fas fa-cog"></i>
+                    <span>قوانین شماره‌گذاری</span>
+                </button>
+                <button class="nav-item" data-tab="card-design">
+                    <i class="fas fa-palette"></i>
+                    <span>طراحی کارت</span>
+                </button>
+                <button class="nav-item" data-tab="print">
+                    <i class="fas fa-print"></i>
+                    <span>چاپ</span>
+                </button>
+                <button class="nav-item" data-tab="help">
+                    <i class="fas fa-question-circle"></i>
+                    <span>راهنما</span>
+                </button>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="user-profile">
+                    <div class="avatar"><i class="fas fa-user"></i></div>
+                    <div class="user-info">
+                        <div class="username">مدیر سیستم</div>
+                        <div class="role">صدور برگه شماره صندلی</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="content-header">
+                <div class="header-title">
+                    <h1><i class="fas fa-chair"></i> سیستم صدور و چاپ برگه شماره صندلی</h1>
+                    <p>طراحی پیشرفته | هر کارت یک برگ A4 افقی با نسبت طلایی 1.414</p>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-outline" id="homeBtn"><i class="fas fa-home"></i> خانه</button>
+                    <button class="btn btn-outline" id="helpBtn"><i class="fas fa-question-circle"></i> راهنما</button>
+                    <button class="btn btn-primary" id="resetBtn"><i class="fas fa-redo"></i> شروع مجدد</button>
+                </div>
+            </header>
+
+            <div class="content-area">
+                <!-- تب 1: آپلود Excel -->
+                <div class="tab-pane active" id="tab-excel-upload">
+                    <div class="tab-header">
+                        <h2><i class="fas fa-file-excel"></i> آپلود فایل Excel</h2>
+                        <p>فایل Excel حاوی اطلاعات دانش‌آموزان را آپلود کنید</p>
+                    </div>
+                    <div class="card-panel">
+                        <div class="form-group full-width">
+                            <label class="form-label required"><i class="fas fa-file-excel"></i> انتخاب فایل Excel</label>
+                            <input type="file" id="excelFile" accept=".xlsx,.xls,.csv" style="display: none;">
+                            <div class="button-group">
+                                <button class="btn btn-primary" id="uploadExcelBtn"><i class="fas fa-upload"></i> انتخاب فایل</button>
+                                <button class="btn btn-outline" id="downloadSampleBtn"><i class="fas fa-download"></i> دانلود نمونه</button>
+                            </div>
+                            <div class="form-hint" id="excelFileName"></div>
+                        </div>
+                    </div>
+
+                    <div id="columnSelector" style="display: none;">
+                        <div class="card-panel">
+                            <h3 class="panel-title"><i class="fas fa-columns"></i> انتخاب ستون‌های داده</h3>
+                            <div class="column-selector">
+                                <h4>ستون کد ملی (برای دریافت تصویر):</h4>
+                                <div class="column-badges" id="nationalCodeColumns"></div>
+                            </div>
+                            <div class="column-selector">
+                                <h4>ستون نام دانش‌آموز:</h4>
+                                <div class="column-badges" id="firstNameColumns"></div>
+                            </div>
+                            <div class="column-selector">
+                                <h4>ستون نام خانوادگی:</h4>
+                                <div class="column-badges" id="lastNameColumns"></div>
+                            </div>
+                            <div class="column-selector">
+                                <h4>ستون کلاس/پایه:</h4>
+                                <div class="column-badges" id="classColumns"></div>
+                            </div>
+                            <div class="button-group" style="margin-top: 24px;">
+                                <button class="btn btn-success" id="applyColumnSettings"><i class="fas fa-check"></i> تایید و ادامه</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="excelPreview" style="display: none; margin-top: 24px;">
+                        <div class="card-panel">
+                            <h3 class="panel-title"><i class="fas fa-table"></i> پیش‌نمایش داده‌های Excel</h3>
+                            <div class="table-wrapper">
+                                <table class="data-table" id="excelDataTable"></table>
+                            </div>
+                            <div class="form-hint">تعداد کل رکوردها: <span id="totalRecords">۰</span></div>
+                        </div>
+                    </div>
+                    
+                    <div class="button-group">
+                        <button class="btn btn-primary" id="gotoSchoolInfoBtn"><i class="fas fa-arrow-left"></i> ادامه به اطلاعات آموزشگاه</button>
+                    </div>
+                </div>
+
+                <!-- تب 2: اطلاعات آموزشگاه -->
+                <div class="tab-pane" id="tab-school-info">
+                    <div class="tab-header">
+                        <h2><i class="fas fa-school"></i> اطلاعات آموزشگاه</h2>
+                        <p>کدهای آموزشگاه خود را وارد کنید (مطابق با سامانه سیدا)</p>
+                    </div>
+                    <div class="info-card">
+                        <i class="fas fa-info-circle"></i>
+                        <div><strong>نکته مهم:</strong><p>این اطلاعات برای دریافت تصاویر دانش‌آموزان از سامانه سیدا استفاده می‌شود.</p></div>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label required"><i class="fas fa-map-marker-alt"></i> کد استان</label>
+                            <input type="text" id="provinceCode" class="form-input" placeholder="۱۶" value="16" maxlength="2">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label required"><i class="fas fa-map-pin"></i> کد منطقه</label>
+                            <input type="text" id="areaCode" class="form-input" placeholder="۱۶۷۰" value="1670" maxlength="4">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label required"><i class="fas fa-school"></i> کد آموزشگاه</label>
+                            <input type="text" id="schoolCode" class="form-input" placeholder="۵۴۱۳۰۸۰۸" value="54130808" maxlength="8">
+                        </div>
+                    </div>
+                    <div class="button-group">
+                        <button class="btn btn-primary" id="saveSchoolInfoBtn"><i class="fas fa-save"></i> ذخیره و ادامه</button>
+                    </div>
+                </div>
+
+                <!-- تب 3: دانلود تصاویر -->
+                <div class="tab-pane" id="tab-download-images">
+                    <div class="tab-header">
+                        <h2><i class="fas fa-download"></i> دانلود تصاویر دانش‌آموزان</h2>
+                        <p>دریافت تصاویر از سامانه سیدا و ذخیره در سیستم</p>
+                    </div>
+                    <div class="stats-grid">
+                        <div class="stat-card"><div class="stat-icon"><i class="fas fa-users"></i></div><div><div class="stat-number" id="totalStudentsCount">۰</div><div class="stat-label">تعداد دانش‌آموزان</div></div></div>
+                        <div class="stat-card"><div class="stat-icon success"><i class="fas fa-check-circle"></i></div><div><div class="stat-number" id="downloadedCount">۰</div><div class="stat-label">تصاویر دانلود شده</div></div></div>
+                        <div class="stat-card"><div class="stat-icon error"><i class="fas fa-times-circle"></i></div><div><div class="stat-number" id="failedCount">۰</div><div class="stat-label">ناموفق</div></div></div>
+                    </div>
+                    <div class="card-panel">
+                        <h3 class="panel-title"><i class="fas fa-sliders-h"></i> تنظیمات دانلود</h3>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label class="form-label">تعداد دانلود همزمان</label>
+                                <select id="concurrency" class="form-select">
+                                    <option value="1">۱ تصویر</option>
+                                    <option value="3" selected>۳ تصویر</option>
+                                    <option value="5">۵ تصویر</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">فیلتر کلاس</label>
+                                <select id="downloadClassFilter" class="form-select"><option value="all">همه کلاس‌ها</option></select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="progress-container" id="progressContainer" style="display: none;">
+                        <div class="progress-header"><span><i class="fas fa-download"></i> پیشرفت</span><span class="progress-percent" id="progressPercent">۰%</span></div>
+                        <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+                        <div class="progress-stats">
+                            <span><i class="fas fa-check-circle"></i> <span id="progressSuccess">۰</span></span>
+                            <span><i class="fas fa-times-circle"></i> <span id="progressError">۰</span></span>
+                            <span><i class="fas fa-clock"></i> <span id="progressPending">۰</span></span>
+                        </div>
+                    </div>
+
+                    <div class="button-group">
+                        <button class="btn btn-success" id="startDownloadBtn"><i class="fas fa-play"></i> شروع دانلود</button>
+                        <button class="btn btn-error" id="stopDownloadBtn" disabled><i class="fas fa-stop"></i> توقف</button>
+                        <button class="btn btn-primary" id="gotoNumberingBtn"><i class="fas fa-arrow-left"></i> رفتن به شماره‌گذاری</button>
+                    </div>
+                </div>
+
+                <!-- تب 4: قوانین شماره‌گذاری -->
+                <div class="tab-pane" id="tab-number-rules">
+                    <div class="tab-header">
+                        <h2><i class="fas fa-cog"></i> قوانین شماره‌گذاری هوشمند</h2>
+                        <p>تنظیمات پیشرفته برای شماره‌گذاری صندلی‌ها</p>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">نوع شماره‌گذاری</label>
+                            <select id="numberingType" class="form-select">
+                                <option value="sequential">متوالی (۱،۲،۳،...)</option>
+                                <option value="even">فقط اعداد زوج</option>
+                                <option value="odd">فقط اعداد فرد</option>
+                                <option value="multiple">مضرب یک عدد</option>
+                                <option value="custom">بازه دلخواه</option>
+                                <option value="reverse">معکوس</option>
+                                <option value="random">تصادفی</option>
+                                <option value="roundRobin">چیدمان ترکیبی (گردشی)</option>
+                            </select>
+                        </div>
+                        <div class="form-group" id="multipleInputGroup" style="display: none;">
+                            <label class="form-label">مضرب عدد</label>
+                            <input type="number" id="multipleValue" class="form-input" value="2" min="1">
+                        </div>
+                        <div class="form-group" id="customRangeGroup" style="display: none;">
+                            <label class="form-label">بازه دلخواه</label>
+                            <div class="input-group"><input type="number" id="customStart" class="form-input" value="1"><span>تا</span><input type="number" id="customEnd" class="form-input" value="100"></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">شروع از</label>
+                            <input type="number" id="startFrom" class="form-input" value="1" min="1">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">گام</label>
+                            <input type="number" id="stepValue" class="form-input" value="1" min="1">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">پیشوند</label>
+                            <input type="text" id="numberPrefix" class="form-input" placeholder="مثال: صندلی شماره">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">پسوند</label>
+                            <input type="text" id="numberSuffix" class="form-input" placeholder="مثال: (سمت راست)">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">ترتیب</label>
+                            <select id="sortOrder" class="form-select">
+                                <option value="original">همان ترتیب Excel</option>
+                                <option value="lastName">بر اساس نام خانوادگی</option>
+                                <option value="firstName">بر اساس نام</option>
+                                <option value="byNumber">بر اساس شماره صندلی</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">فیلتر کلاس</label>
+                            <select id="classFilter" class="form-select"><option value="all">همه کلاس‌ها</option></select>
+                        </div>
+                    </div>
+                    
+                    <div class="info-card" id="roundRobinInfo" style="display: none;">
+                        <i class="fas fa-info-circle"></i>
+                        <div>چیدمان ترکیبی: دانش‌آموزان به صورت گردشی بین کلاس‌ها پخش می‌شوند.</div>
+                    </div>
+
+                    <div class="info-card">
+                        <i class="fas fa-chart-line"></i>
+                        <div><strong>نمونه:</strong> <span id="sampleNumbering">۱ ، ۲ ، ۳ ، ۴ ، ۵</span></div>
+                    </div>
+                    
+                    <div class="button-group">
+                        <button class="btn btn-success" id="applyNumberingBtn"><i class="fas fa-check"></i> اعمال شماره‌گذاری و رفتن به طراحی</button>
+                    </div>
+                </div>
+
+                <!-- تب 5: طراحی کارت پیشرفته -->
+                <div class="tab-pane" id="tab-card-design">
+                    <div class="designer-container">
+                        <div class="designer-toolbar">
+                            <div class="toolbar-group">
+                                <button class="toolbar-btn active" data-element="card"><i class="fas fa-credit-card"></i><span>کارت</span></button>
+                                <button class="toolbar-btn" data-element="image"><i class="fas fa-image"></i><span>تصویر</span></button>
+                                <button class="toolbar-btn" data-element="number"><i class="fas fa-sort-numeric-up"></i><span>شماره</span></button>
+                                <button class="toolbar-btn" data-element="name"><i class="fas fa-user"></i><span>نام</span></button>
+                                <button class="toolbar-btn" data-element="class"><i class="fas fa-graduation-cap"></i><span>کلاس</span></button>
+                                <button class="toolbar-btn" data-element="spacing"><i class="fas fa-arrows-alt"></i><span>فاصله</span></button>
+                            </div>
+                            <div class="toolbar-actions">
+                                <button class="btn btn-sm btn-outline" id="resetDesignBtn"><i class="fas fa-undo"></i><span>بازنشانی</span></button>
+                                <button class="btn btn-sm btn-primary" id="saveDesignBtn"><i class="fas fa-save"></i><span>ذخیره</span></button>
+                            </div>
+                        </div>
+
+                        <div class="designer-split">
+                            <div class="designer-settings">
+                                <div class="settings-header">
+                                    <h3><i class="fas fa-sliders-h"></i> تنظیمات عنصر</h3>
+                                </div>
+                                <div class="settings-content">
+                                    <div class="element-settings active" data-element="card">
+                                        <h4><i class="fas fa-credit-card"></i> تنظیمات کارت</h4>
+                                        <div class="settings-group">
+                                            <label>رنگ پس‌زمینه</label>
+                                            <input type="color" id="cardBgColor" value="#ffffff" class="setting-input">
+                                        </div>
+                                        <div class="settings-group">
+                                            <label>حاشیه (px)</label>
+                                            <div class="number-control">
+                                                <input type="range" id="cardBorderWidth" min="0" max="20" value="1" step="1">
+                                                <input type="number" id="cardBorderWidthNum" class="number-input" value="1" step="1">
+                                                <span class="unit">px</span>
+                                            </div>
+                                        </div>
+                                        <div class="settings-group">
+                                            <label>رنگ حاشیه</label>
+                                            <input type="color" id="cardBorderColor" value="#cccccc" class="setting-input">
+                                        </div>
+                                        <div class="settings-group">
+                                            <label>گردی گوشه (px)</label>
+                                            <div class="number-control">
+                                                <input type="range" id="cardBorderRadius" min="0" max="100" value="14" step="1">
+                                                <input type="number" id="cardBorderRadiusNum" class="number-input" value="14" step="1">
+                                                <span class="unit">px</span>
+                                            </div>
+                                        </div>
+                                        <div class="settings-group">
+                                            <label>سایه</label>
+                                            <select id="cardShadow" class="setting-select">
+                                                <option value="none" selected>بدون سایه</option>
+                                                <option value="sm">سایه کوچک</option>
+                                                <option value="md">سایه متوسط</option>
+                                                <option value="lg">سایه بزرگ</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="element-settings" data-element="image">
+                                        <h4><i class="fas fa-image"></i> تنظیمات تصویر</h4>
+                                        <div class="settings-group">
+                                            <label><input type="checkbox" id="showStudentPhoto" checked> نمایش تصویر</label>
+                                        </div>
+                                        <div class="settings-group">
+                                            <label>موقعیت</label>
+                                            <div class="position-buttons">
+                                                <button class="pos-btn" data-pos="left"><i class="fas fa-arrow-right"></i> راست</button>
+                                                <button class="pos-btn active" data-pos="right"><i class="fas fa-arrow-left"></i> چپ</button>
+                                            </div>
+                                            <input type="hidden" id="imagePosition" value="right">
+                                        </div>
+                                        <div class="settings-group">
+                                            <label>عرض تصویر (%)</label>
+                                            <div class="number-control">
+                                                <input type="range" id="imageWidth" min="20" max="80" value="50" step="1">
+                                                <input type="number" id="imageWidthNum" class="number-input" value="50" step="1">
+                                                <span class="unit">%</span>
+                                            </div>
+                                        </div>
+                                        <div class="settings-group">
+                                            <label>گردی گوشه (px)</label>
+                                            <div class="number-control">
+                                                <input type="range" id="imageBorderRadius" min="0" max="100" value="0" step="1">
+                                                <input type="number" id="imageBorderRadiusNum" class="number-input" value="0" step="1">
+                                                <span class="unit">px</span>
+                                            </div>
+                                        </div>
+                                        <div class="settings-group">
+                                            <label>حاشیه (px)</label>
+                                            <div class="number-control">
+                                                <input type="range" id="imageBorderWidth" min="0" max="20" value="1" step="1">
+                                                <input type="number" id="imageBorderWidthNum" class="number-input" value="1" step="1">
+                                                <span class="unit">px</span>
+                                            </div>
+                                        </div>
+                                        <div class="settings-group">
+                                            <label>رنگ حاشیه</label>
+                                            <input type="color" id="imageBorderColor" value="#cccccc" class="setting-input">
+                                        </div>
+                                        <div class="settings-group">
+                                            <label>شفافیت (%)</label>
+                                            <div class="number-control">
+                                                <input type="range" id="imageOpacity" min="0" max="100" value="100" step="1">
+                                                <input type="number" id="imageOpacityNum" class="number-input" value="100" step="1">
+                                                <span class="unit">%</span>
+                                            </div>
+                                        </div>
+                                        <div class="settings-group">
+                                            <label><input type="checkbox" id="imageRoundFull"> گردی کامل</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="element-settings" data-element="number">
+                                        <h4><i class="fas fa-sort-numeric-up"></i> تنظیمات شماره صندلی</h4>
+                                        <div class="settings-group">
+                                            <label><input type="checkbox" id="showSeatNumber" checked> نمایش شماره</label>
+                                        </div>
+                                        <div class="settings-group">
+                                            <label>اندازه فونت (px)</label>
+                                            <div class="number-control">
+                                                <input type="range" id="numberFontSize" min="20" max="200" value="180" step="1">
+                                                <input type="number" id="numberFontSizeNum" class="number-input" value="180" step="1">
+                                                <span class="unit">px</span>
+                                            </div>
+                                        </div>
+                                        <div class="settings-group">
+                                            <label>ضخامت</label>
+                                            <select id="numberFontWeight" class="setting-select">
+                                                <option value="normal">عادی</option>
+                                                <option value="bold" selected>پررنگ</option>
+                                                <option value="800">800</option>
+                                                <option value="900">900</option>
+                                            </select>
+                                        </div>
+                                        <div class="settings-group">
+                                            <label>رنگ پس‌زمینه</label>
+                                            <input type="color" id="numberBgColor" value="#ffffff" class="setting-input">
+                                        </div>
+                                        <div class="settings-group">
+                                            <label>رنگ متن</label>
+                                            <input type="color" id="numberTextColor" value="#000000" class="setting-input">
+                                        </div>
+                                        <div class="settings-group">
+                                            <label>گردی گوشه (px)</label>
+                                            <div class="number-control">
+                                                <input type="range" id="numberBorderRadius" min="0" max="100" value="20" step="1">
+                                                <input type="number" id="numberBorderRadiusNum" class="number-input" value="20" step="1">
+                                                <span class="unit">px</span>
+                                            </div>
+                                        </div>
+                                        <div class="settings-group">
+                                            <label>حاشیه داخلی (px)</label>
+                                            <div class="number-control">
+                                                <input type="range" id="numberPadding" min="0" max="60" value="15" step="1">
+                                                <input type="number" id="numberPaddingNum" class="number-input" value="15" step="1">
+                                                <span class="unit">px</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="element-settings" data-element="name">
+                                        <h4><i class="fas fa-user"></i> تنظیمات نام دانش‌آموز</h4>
+                                        <div class="settings-group">
+                                            <label><input type="checkbox" id="showFullName" checked> نمایش نام</label>
+                                        </div>
+                                        <div class="settings-group">
+                                            <label>اندازه فونت (px)</label>
+                                            <div class="number-control">
+                                                <input type="range" id="nameFontSize" min="16" max="120" value="60" step="1">
+                                                <input type="number" id="nameFontSizeNum" class="number-input" value="60" step="1">
+                                                <span class="unit">px</span>
+                                            </div>
+                                        </div>
+                                        <div class="settings-group">
+                                            <label>ضخامت</label>
+                                            <select id="nameFontWeight" class="setting-select">
+                                                <option value="normal">عادی</option>
+                                                <option value="bold" selected>پررنگ</option>
+                                                <option value="700">700</option>
+                                            </select>
+                                        </div>
+                                        <div class="settings-group">
+                                            <label>رنگ متن</label>
+                                            <input type="color" id="nameColor" value="#000000" class="setting-input">
+                                        </div>
+                                        <div class="settings-group">
+                                            <label>تراز متن</label>
+                                            <select id="nameTextAlign" class="setting-select">
+                                                <option value="center" selected>وسط</option>
+                                                <option value="right">راست</option>
+                                                <option value="left">چپ</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="element-settings" data-element="class">
+                                        <h4><i class="fas fa-graduation-cap"></i> تنظیمات کلاس</h4>
+                                        <div class="settings-group">
+                                            <label><input type="checkbox" id="showClassName" checked> نمایش کلاس</label>
+                                        </div>
+                                        <div class="settings-group">
+                                            <label>اندازه فونت (px)</label>
+                                            <div class="number-control">
+                                                <input type="range" id="classFontSize" min="12" max="80" value="60" step="1">
+                                                <input type="number" id="classFontSizeNum" class="number-input" value="60" step="1">
+                                                <span class="unit">px</span>
+                                            </div>
+                                        </div>
+                                        <div class="settings-group">
+                                            <label>رنگ متن</label>
+                                            <input type="color" id="classColor" value="#000000" class="setting-input">
+                                        </div>
+                                        <div class="settings-group">
+                                            <label>تراز متن</label>
+                                            <select id="classTextAlign" class="setting-select">
+                                                <option value="center" selected>وسط</option>
+                                                <option value="right">راست</option>
+                                                <option value="left">چپ</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="element-settings" data-element="spacing">
+                                        <h4><i class="fas fa-arrows-alt"></i> فاصله‌گذاری</h4>
+                                        <div class="settings-group">
+                                            <label>فاصله داخلی کارت (mm)</label>
+                                            <div class="number-control">
+                                                <input type="range" id="cardPadding" min="0" max="50" value="9" step="1">
+                                                <input type="number" id="cardPaddingNum" class="number-input" value="9" step="1">
+                                                <span class="unit">mm</span>
+                                            </div>
+                                        </div>
+                                        <div class="settings-group">
+                                            <label>فاصله متن تا تصویر (px)</label>
+                                            <div class="number-control">
+                                                <input type="range" id="gapTextImage" min="0" max="100" value="25" step="1">
+                                                <input type="number" id="gapTextImageNum" class="number-input" value="25" step="1">
+                                                <span class="unit">px</span>
+                                            </div>
+                                        </div>
+                                        <div class="settings-group">
+                                            <label>فاصله شماره تا نام (px)</label>
+                                            <div class="number-control">
+                                                <input type="range" id="gapNumberName" min="0" max="80" value="15" step="1">
+                                                <input type="number" id="gapNumberNameNum" class="number-input" value="15" step="1">
+                                                <span class="unit">px</span>
+                                            </div>
+                                        </div>
+                                        <div class="settings-group">
+                                            <label>فاصله نام تا کلاس (px)</label>
+                                            <div class="number-control">
+                                                <input type="range" id="gapNameClass" min="0" max="60" value="10" step="1">
+                                                <input type="number" id="gapNameClassNum" class="number-input" value="10" step="1">
+                                                <span class="unit">px</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="designer-preview">
+                                <div class="preview-header">
+                                    <span><i class="fas fa-eye"></i> پیش‌نمایش زنده</span>
+                                    <span class="preview-size">297×210 mm</span>
+                                </div>
+                                <div class="live-preview-wrapper" id="livePreviewWrapper">
+                                    <div class="a4-preview-container" id="livePreviewCard">
+                                        <div class="empty-preview">
+                                            <i class="fas fa-chair"></i>
+                                            <p>لطفاً ابتدا شماره‌گذاری را اعمال کنید</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="preview-footer">
+                                    <span><i class="fas fa-info-circle"></i> نسبت ثابت 1.414</span>
+                                    <span><i class="fas fa-arrows-alt"></i> بدون خروج از کادر</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- تب 6: چاپ -->
+                <div class="tab-pane" id="tab-print">
+                    <div class="tab-header">
+                        <h2><i class="fas fa-print"></i> چاپ کارت‌ها</h2>
+                        <p>هر کارت در یک برگ A4 افقی مجزا با نسبت ثابت 1.414</p>
+                    </div>
+                    <div class="stats-grid">
+                        <div class="stat-card"><div class="stat-icon"><i class="fas fa-chair"></i></div><div><div class="stat-number" id="printTotalCards">۰</div><div class="stat-label">تعداد کارت‌ها</div></div></div>
+                        <div class="stat-card"><div class="stat-icon"><i class="fas fa-file-pdf"></i></div><div><div class="stat-number" id="printTotalPages">۰</div><div class="stat-label">تعداد صفحات A4</div></div></div>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">حاشیه صفحه (mm)</label>
+                            <input type="number" id="printMargin" class="form-input" value="5" min="0" max="20" step="1">
+                        </div>
+                    </div>
+                    <div class="info-card">
+                        <i class="fas fa-info-circle"></i>
+                        <div><strong>اطلاعات مهم:</strong> هر کارت دقیقاً در یک برگ A4 افقی (297×210mm) با نسبت 1.414 چاپ می‌شود.</div>
+                    </div>
+                    <div class="button-group">
+                        <button class="btn btn-success" id="printBtn"><i class="fas fa-print"></i> چاپ مستقیم</button>
+                        <button class="btn btn-outline" id="downloadExcelReportBtn"><i class="fas fa-file-excel"></i> خروجی Excel</button>
+                    </div>
+                </div>
+
+                <!-- تب 7: راهنما -->
+                <div class="tab-pane" id="tab-help">
+                    <div class="tab-header">
+                        <h2><i class="fas fa-question-circle"></i> راهنمای استفاده</h2>
+                        <p>آموزش گام به گام کار با سیستم طراحی پیشرفته</p>
+                    </div>
+                    <div class="steps-container">
+                        <div class="step"><div class="step-num">۱</div><div><strong>آپلود Excel</strong><p>فایل را آپلود کرده و ستون‌ها را مشخص کنید.</p></div></div>
+                        <div class="step"><div class="step-num">۲</div><div><strong>اطلاعات آموزشگاه</strong><p>کدهای استان، منطقه و آموزشگاه را وارد کنید.</p></div></div>
+                        <div class="step"><div class="step-num">۳</div><div><strong>دانلود تصاویر</strong><p>روی "شروع دانلود" کلیک کنید.</p></div></div>
+                        <div class="step"><div class="step-num">۴</div><div><strong>شماره‌گذاری</strong><p>نوع شماره‌گذاری را انتخاب کنید.</p></div></div>
+                        <div class="step"><div class="step-num">۵</div><div><strong>طراحی کارت</strong><p>از نوار ابزار برای تنظیمات استفاده کنید.</p></div></div>
+                        <div class="step"><div class="step-num">۶</div><div><strong>چاپ</strong><p>از تب چاپ، کارت‌ها را چاپ کنید.</p></div></div>
+                    </div>
+                    <div class="info-card">
+                        <i class="fas fa-lightbulb"></i>
+                        <div><strong>نکته طراحی:</strong> نسبت کارت ثابت 1.414 (نسبت طلایی A4 افقی) است.</div>
+                    </div>
+                </div>
+            </div>
+
+            <footer class="content-footer">
+                <div class="system-status">
+                    <div class="status-indicator"><div class="status-dot"></div><span>سیستم آماده به کار</span></div>
+                    <div class="version">نسخه ۱۴.۰</div>
+                </div>
+            </footer>
+        </main>
+    </div>
+
+    <!-- دکمه‌های موبایل در فوتر -->
+    <div class="mobile-footer-actions" id="mobileFooterActions">
+        <button class="btn btn-outline mobile-action-btn" id="mobileHomeBtn">
+            <i class="fas fa-home"></i>
+            <span>خانه</span>
+        </button>
+        <button class="btn btn-outline mobile-action-btn" id="mobileHelpBtn">
+            <i class="fas fa-question-circle"></i>
+            <span>راهنما</span>
+        </button>
+        <button class="btn btn-primary mobile-action-btn" id="mobileResetBtn">
+            <i class="fas fa-redo"></i>
+            <span>شروع مجدد</span>
+        </button>
+    </div>
+
+    <div class="modal-overlay" id="imageModal">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-title">پیش‌نمایش تصویر</div>
+                <button class="modal-close" id="modalClose">&times;</button>
+            </div>
+            <div class="modal-body">
+                <img id="modalImage">
+            </div>
+        </div>
+    </div>
+    <div class="notification-container" id="notificationContainer"></div>
+
+    <script src="./assets/js/xlsx.full.min.js"></script>
+    <script src="./assets/js/html2pdf.bundle.min.js"></script>
+    <script src="./assets/js/script.js"></script>
+</body>
+</html>

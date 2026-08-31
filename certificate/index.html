@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="fa">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <meta name="theme-color" content="#0f172a">
+    <title>سیستم صدور گواهی و نامه تحصیلی | Professional Certificate System</title>
+    <link rel="stylesheet" href="./assets/css/popup.css">
+    <link rel="stylesheet" href="./assets/css/all.min.css">
+    <link rel="stylesheet" href="./assets/css/persian-datepicker.min.css"/>
+    <script src="./assets/js/xlsx.full.min.js"></script>
+</head>
+<body>
+    <!-- هدر موبایل (فقط در موبایل نمایش داده می‌شود) -->
+    <div class="mobile-header" id="mobileHeader">
+        <button class="mobile-menu-btn" id="mobileMenuBtn">
+            <i class="fas fa-bars"></i>
+        </button>
+        <div class="mobile-logo">
+            <i class="fas fa-graduation-cap"></i>
+            <span>سامانه گواهی و نامه</span>
+        </div>
+        <div class="mobile-header-spacer"></div>
+    </div>
+    
+    <!-- ماسک overlay برای بستن منو در موبایل -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    
+    <div class="app-container">
+        <!-- نوار کناری -->
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <span>سامانه گواهی و نامه</span>
+                </div>
+                <button class="sidebar-close-btn" id="sidebarCloseBtn">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" data-tab="document-type">
+                    <i class="fas fa-file-alt"></i>
+                    <span>انتخاب نوع سند</span>
+                </a>
+                <a href="#" class="nav-item" data-tab="student-info">
+                    <i class="fas fa-user-graduate"></i>
+                    <span>اطلاعات دانش‌آموز</span>
+                </a>
+                <a href="#" class="nav-item" data-tab="school-info">
+                    <i class="fas fa-school"></i>
+                    <span>اطلاعات آموزشگاه</span>
+                </a>
+                <a href="#" class="nav-item" data-tab="academic-info">
+                    <i class="fas fa-book-open"></i>
+                    <span>اطلاعات تحصیلی</span>
+                </a>
+                <a href="#" class="nav-item" data-tab="document-info">
+                    <i class="fas fa-file-signature"></i>
+                    <span>اطلاعات سند</span>
+                </a>
+                <a href="#" class="nav-item conditional" data-tab="military-info" id="militaryInfoTab" style="display: none;">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>اطلاعات نظام وظیفه</span>
+                </a>
+                <a href="#" class="nav-item" data-tab="preview">
+                    <i class="fas fa-eye"></i>
+                    <span>پیش‌نمایش و چاپ</span>
+                </a>
+                <a href="#" class="nav-item" data-tab="certificate-history">
+                    <i class="fas fa-history"></i>
+                    <span>تاریخچه اسناد</span>
+                </a>
+                <a href="#" class="nav-item" data-tab="settings">
+                    <i class="fas fa-cogs"></i>
+                    <span>تنظیمات</span>
+                </a>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <div class="user-profile">
+                    <div class="avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="user-info">
+                        <div class="username">کاربر سیستم</div>
+                        <div class="role">مدیر آموزشگاه</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- محتوای اصلی -->
+        <div class="main-content">
+            <!-- هدر -->
+            <header class="content-header">
+                <div class="header-title">
+                    <h1>
+                        <i class="fas fa-file-certificate"></i>
+                        سیستم صدور گواهی و نامه تحصیلی
+                    </h1>
+                    <p>سامانه پیشرفته مدیریت و صدور اسناد تحصیلی</p>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-outline" id="homeBtn">
+                        <i class="fas fa-home"></i>
+                        خانه
+                    </button>
+                    <button class="btn btn-outline" id="helpBtn">
+                        <i class="fas fa-question-circle"></i>
+                        راهنما
+                    </button>
+                    <button class="btn btn-primary" id="newCertificateBtn">
+                        <i class="fas fa-file-circle-plus"></i>
+                        سند جدید
+                    </button>
+                </div>
+            </header>
+
+            <!-- محتوای تب‌ها -->
+            <div class="content-area">
+                <!-- تب انتخاب نوع سند -->
+                <div class="tab-content active" id="document-type">
+                    <div class="tab-header">
+                        <h2>
+                            <i class="fas fa-file-alt"></i>
+                            انتخاب نوع سند
+                        </h2>
+                        <p>لطفاً نوع سند مورد نظر خود را انتخاب کنید</p>
+                    </div>
+                    
+                    <div class="document-type-selection">
+                        <div class="document-type-cards">
+                            <div class="document-type-card active" data-document-type="certificate">
+                                <div class="document-icon">
+                                    <i class="fas fa-certificate"></i>
+                                </div>
+                                <h3>گواهی اشتغال به تحصیل</h3>
+                                <p>صدور گواهی رسمی اشتغال به تحصیل برای ارائه به سازمان‌های مختلف</p>
+                                <div class="document-features">
+                                    <div class="feature">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>متن رسمی گواهی تحصیلی</span>
+                                    </div>
+                                    <div class="feature">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>قابل ارائه به ثبت احوال و سایر سازمان‌ها</span>
+                                    </div>
+                                    <div class="feature">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>دارای قالب‌های مختلف چاپ</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="document-type-card" data-document-type="letter">
+                                <div class="document-icon">
+                                    <i class="fas fa-envelope-open-text"></i>
+                                </div>
+                                <h3>نامه درخواست معافیت تحصیلی</h3>
+                                <p>صدور نامه رسمی درخواست معافیت تحصیلی برای سازمان وظیفه عمومی</p>
+                                <div class="document-features">
+                                    <div class="feature">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>متن تخصصی معافیت تحصیلی</span>
+                                    </div>
+                                    <div class="feature">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>ارائه به سازمان وظیفه عمومی</span>
+                                    </div>
+                                    <div class="feature">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>شرایط و ضوابط معافیت تحصیلی</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="info-card" style="margin-top: 30px;">
+                            <i class="fas fa-info-circle"></i>
+                            <div>
+                                <strong>راهنمای انتخاب نوع سند</strong>
+                                <p style="margin-top: 8px;">
+                                    <strong>گواهی اشتغال به تحصیل:</strong> برای ارائه به ثبت احوال، بانک‌ها، سفارتخانه‌ها و سایر سازمان‌هایی که نیاز به تأیید تحصیلی دارند.<br>
+                                    <strong>نامه درخواست معافیت تحصیلی:</strong> برای ارائه به سازمان وظیفه عمومی به منظور درخواست معافیت تحصیلی مشمولان.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- تب اطلاعات دانش‌آموز -->
+                <div class="tab-content" id="student-info">
+                    <div class="tab-header">
+                        <h2>
+                            <i class="fas fa-user-graduate"></i>
+                            اطلاعات دانش‌آموز
+                        </h2>
+                        <p>لطفاً اطلاعات هویتی دانش‌آموز را وارد نمایید</p>
+                    </div>
+                    
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label required">
+                                <i class="fas fa-id-card"></i>
+                                کد ملی دانش‌آموز
+                            </label>
+                            <input type="text" id="nationalCode" class="form-input" placeholder="۰۸۶۰۹۴۹۵۵۹" maxlength="10" dir="ltr">
+                            <div class="form-hint">کد ملی باید ۱۰ رقم باشد (ممکن است با صفر شروع شود)</div>
+                        </div>
+                        
+                        <div class="form-group full-width" style="margin-top: -15px; margin-bottom: 15px;">
+                            <div class="courses-header-actions" style="justify-content: flex-start;">
+                                <button class="btn btn-success" id="searchStudentBtn">
+                                    <i class="fas fa-search"></i>
+                                    جستجو در پایگاه داده
+                                </button>
+                                <span class="courses-badge">
+                                    <i class="fas fa-info-circle"></i>
+                                    <span>پس از وارد کردن کد ملی، از این دکمه یا کلید Enter استفاده کنید</span>
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label required">
+                                <i class="fas fa-user"></i>
+                                نام کامل دانش‌آموز
+                            </label>
+                            <input type="text" id="studentName" class="form-input" placeholder="نام و نام خانوادگی">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label required">
+                                <i class="fas fa-male"></i>
+                                نام پدر
+                            </label>
+                            <input type="text" id="fatherName" class="form-input" placeholder="نام پدر">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label required">
+                                <i class="fas fa-city"></i>
+                                شهر محل صدور شناسنامه
+                            </label>
+                            <input type="text" id="birthCity" class="form-input" placeholder="شهر محل صدور شناسنامه">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label required">
+                                <i class="fas fa-birthday-cake"></i>
+                                تاریخ تولد
+                            </label>
+                            <div class="date-picker-container">
+                                <input type="text" id="birthDate" class="form-input date-picker" placeholder="انتخاب تاریخ تولد" readonly>
+                                <i class="fas fa-calendar-alt date-picker-icon"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- تب اطلاعات آموزشگاه -->
+                <div class="tab-content" id="school-info">
+                    <div class="tab-header">
+                        <h2>
+                            <i class="fas fa-school"></i>
+                            اطلاعات آموزشگاه
+                        </h2>
+                        <p>اطلاعات آموزشگاه و مدیریت تصویر دانش‌آموز</p>
+                    </div>
+                    
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label required">
+                                <i class="fas fa-map-marker-alt"></i>
+                                کد استان
+                            </label>
+                            <input type="text" id="provinceCode" class="form-input" placeholder="۱۶" maxlength="2" dir="ltr">
+                            <div class="form-hint">کد ۲ رقمی استان (مثال: 16 برای خراسان رضوی)</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label required">
+                                <i class="fas fa-map-pin"></i>
+                                کد منطقه
+                            </label>
+                            <input type="text" id="areaCode" class="form-input" placeholder="۱۶۷۰" maxlength="4" dir="ltr">
+                            <div class="form-hint">کد ۴ رقمی منطقه آموزشی</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label required">
+                                <i class="fas fa-school"></i>
+                                کد آموزشگاه
+                            </label>
+                            <input type="text" id="schoolCode" class="form-input" placeholder="۵۴۱۳۰۸۰۸" maxlength="8" dir="ltr">
+                            <div class="form-hint">کد ۸ رقمی آموزشگاه</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label required">
+                                <i class="fas fa-location-dot"></i>
+                                شهر آموزشگاه
+                            </label>
+                            <input type="text" id="schoolCity" class="form-input" placeholder="شهر محل آموزشگاه">
+                            <div class="form-hint">شهر محل استقرار آموزشگاه</div>
+                        </div>
+                    </div>
+                    
+                    <div class="image-section">
+                        <div class="image-card">
+                            <div class="image-preview" id="imagePreview">
+                                <div class="image-placeholder">
+                                    <i class="fas fa-user"></i>
+                                    <span>تصویر دانش‌آموز</span>
+                                </div>
+                            </div>
+                            <div class="image-info">
+                                <div class="image-status" id="imageStatus">
+                                    <i class="fas fa-info-circle"></i>
+                                    <span>تصویر بارگذاری نشده</span>
+                                </div>
+                                <div class="image-actions">
+                                    <button class="btn btn-primary" id="fetchImageBtn">
+                                        <i class="fas fa-download"></i>
+                                        دریافت از سیدا
+                                    </button>
+                                    <button class="btn btn-outline" id="uploadImageBtn">
+                                        <i class="fas fa-upload"></i>
+                                        آپلود تصویر
+                                    </button>
+                                    <button class="btn btn-error" id="removeImageBtn" style="display: none;">
+                                        <i class="fas fa-trash"></i>
+                                        حذف تصویر
+                                    </button>
+                                    <input type="file" id="imageUpload" accept="image/*" style="display: none;">
+                                </div>
+                                <div class="image-hint">
+                                    برای دریافت تصویر از سیدا، کدهای آموزشگاه و کد ملی دانش‌آموز را وارد کنید
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- تب اطلاعات تحصیلی -->
+                <div class="tab-content" id="academic-info">
+                    <div class="tab-header">
+                        <h2>
+                            <i class="fas fa-book-open"></i>
+                            اطلاعات تحصیلی
+                        </h2>
+                        <p>اطلاعات مربوط به وضعیت تحصیلی دانش‌آموز</p>
+                    </div>
+                    
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label required">
+                                <i class="fas fa-graduation-cap"></i>
+                                پایه تحصیلی
+                            </label>
+                            <select id="grade" class="form-select">
+                                <option value="">انتخاب پایه تحصیلی</option>
+                                <option value="اول">پایه اول</option>
+                                <option value="دوم">پایه دوم</option>
+                                <option value="سوم">پایه سوم</option>
+                                <option value="چهارم">پایه چهارم</option>
+                                <option value="پنجم">پایه پنجم</option>
+                                <option value="ششم">پایه ششم</option>
+                                <option value="هفتم">پایه هفتم</option>
+                                <option value="هشتم">پایه هشتم</option>
+                                <option value="نهم">پایه نهم</option>
+                                <option value="دهم">پایه دهم</option>
+                                <option value="یازدهم">پایه یازدهم</option>
+                                <option value="دوازدهم">پایه دوازدهم</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-network-wired"></i>
+                                رشته تحصیلی
+                            </label>
+                            <select id="field" class="form-select">
+                                <option value="">انتخاب رشته</option>
+                                <option value="ریاضی فیزیک">ریاضی فیزیک</option>
+                                <option value="علوم تجربی">علوم تجربی</option>
+                                <option value="علوم انسانی">علوم انسانی</option>
+                                <option value="معارف اسلامی">معارف اسلامی</option>
+                                <option value="فنی حرفه‌ای">فنی حرفه‌ای</option>
+                                <option value="کار و دانش">کار و دانش</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label required">
+                                <i class="fas fa-calendar-days"></i>
+                                سال تحصیلی
+                            </label>
+                            <input type="text" id="academicYear" class="form-input" placeholder="۱۴۰۴-۱۴۰۵" maxlength="9" dir="ltr">
+                            <div class="form-hint">سال تحصیلی به صورت 1404-1405 وارد شود</div>
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <label class="form-label required">
+                                <i class="fas fa-school-flag"></i>
+                                نام آموزشگاه
+                            </label>
+                            <input type="text" id="schoolName" class="form-input" placeholder="نام کامل آموزشگاه">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label required">
+                                <i class="fas fa-user-tie"></i>
+                                نام مدیر آموزشگاه
+                            </label>
+                            <input type="text" id="managerName" class="form-input" placeholder="نام و نام خانوادگی مدیر">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- تب اطلاعات سند -->
+                <div class="tab-content" id="document-info">
+                    <div class="tab-header">
+                        <h2>
+                            <i class="fas fa-file-signature"></i>
+                            اطلاعات سند
+                        </h2>
+                        <p>اطلاعات عمومی و شماره‌گذاری سند</p>
+                    </div>
+                    
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label required">
+                                <i class="fas fa-hashtag"></i>
+                                شماره سند
+                            </label>
+                            <input type="text" id="documentNumber" class="form-input" placeholder="شماره سند" dir="ltr">
+                            <div class="form-hint">شماره منحصر به فرد سند</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label required">
+                                <i class="fas fa-calendar-alt"></i>
+                                تاریخ سند
+                            </label>
+                            <div class="date-picker-container">
+                                <input type="text" id="documentDate" class="form-input date-picker" placeholder="انتخاب تاریخ سند" readonly>
+                                <i class="fas fa-calendar-alt date-picker-icon"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-building"></i>
+                                سازمان مقصد
+                            </label>
+                            <input type="text" id="forOrganization" class="form-input" placeholder="سازمان مقصد">
+                            <div class="form-hint">سازمانی که سند برای آن صادر می‌شود</div>
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <label class="form-label">
+                                <i class="fas fa-sticky-note"></i>
+                                توضیحات اضافی (اختیاری)
+                            </label>
+                            <textarea id="additionalNotes" class="form-textarea" rows="3" placeholder="هرگونه توضیح اضافی در مورد وضعیت تحصیلی دانش‌آموز"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- تب اطلاعات نظام وظیفه (فقط برای نامه معافیت) -->
+                <div class="tab-content" id="military-info">
+                    <div class="tab-header">
+                        <h2>
+                            <i class="fas fa-shield-alt"></i>
+                            اطلاعات نظام وظیفه
+                        </h2>
+                        <p>اطلاعات تخصصی مربوط به درخواست معافیت تحصیلی</p>
+                    </div>
+                    
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label required">
+                                <i class="fas fa-map-marker-alt"></i>
+                                شهرستان وظیفه عمومی
+                            </label>
+                            <input type="text" id="militaryCity" class="form-input" placeholder="شهرستان وظیفه عمومی" value="قوچان">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label required">
+                                <i class="fas fa-calendar-check"></i>
+                                تاریخ شروع تحصیل
+                            </label>
+                            <div class="date-picker-container">
+                                <input type="text" id="studyStartDate" class="form-input date-picker" placeholder="انتخاب تاریخ شروع تحصیل" readonly>
+                                <i class="fas fa-calendar-alt date-picker-icon"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="info-card" style="margin-top: 20px;">
+                        <i class="fas fa-exclamation-triangle" style="color: var(--warning-500);"></i>
+                        <div>
+                            <strong>شرایط معافیت تحصیلی</strong>
+                            <p style="margin-top: 8px;">طبق مقررات، دانش‌آموزانی که در شرایط زیر قرار دارند، واجد شرایط معافیت تحصیلی نمی‌باشند:</p>
+                            <ul class="conditions-list" style="margin-top: 12px; list-style: none;">
+                                <li style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                                    <i class="fas fa-ban" style="color: var(--error-500);"></i>
+                                    <span>دانش آموزانی که بعد از ورود به سن مشمولیت به صورت داوطلب آزاد اشتغال به تحصیل نموده اند.</span>
+                                </li>
+                                <li style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                                    <i class="fas fa-ban" style="color: var(--error-500);"></i>
+                                    <span>دانش آموزانی که قبل یا بعد از سن مشمولیت موفق به اخذ دیپلم متوسطه شده باشند.</span>
+                                </li>
+                                <li style="display: flex; align-items: center; gap: 8px;">
+                                    <i class="fas fa-ban" style="color: var(--error-500);"></i>
+                                    <span>دانش آموزانی که بعد از سن مشمولیت بیش از سه ماه متوالی وقفه تحصیلی غیر موجه داشته و یا اینکه بعد از سن مشمولیت انصراف، اخراج یا ترک تحصیل نموده باشند.</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- تب پیش‌نمایش و چاپ -->
+                <div class="tab-content" id="preview">
+                    <div class="tab-header">
+                        <h2>
+                            <i class="fas fa-eye"></i>
+                            پیش‌نمایش و چاپ
+                        </h2>
+                        <p>مشاهده نهایی سند و چاپ</p>
+                    </div>
+                    
+                    <div class="results-wrapper">
+                        <div class="courses-header-actions" style="justify-content: center;">
+                            <button class="btn btn-success" id="printBtn">
+                                <i class="fas fa-print"></i>
+                                چاپ سند
+                            </button>
+                            <button class="btn btn-primary" id="saveCertificateBtn">
+                                <i class="fas fa-save"></i>
+                                ذخیره سند
+                            </button>
+                            <select id="printTemplate" class="form-select" style="width: 200px;">
+                                <option value="official">قالب رسمی</option>
+                                <option value="simple">قالب ساده</option>
+                                <option value="modern">قالب مدرن</option>
+                            </select>
+                        </div>
+                        
+                        <div class="certificate-preview" id="certificatePreview">
+                            <div class="certificate-placeholder">
+                                <div class="placeholder-icon">
+                                    <i class="fas fa-file-certificate"></i>
+                                </div>
+                                <h3>پیش‌نمایش سند</h3>
+                                <p>پس از تکمیل اطلاعات، پیش‌نمایش سند در اینجا نمایش داده می‌شود</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- تب تاریخچه اسناد -->
+                <div class="tab-content" id="certificate-history">
+                    <div class="tab-header">
+                        <h2>
+                            <i class="fas fa-history"></i>
+                            تاریخچه اسناد
+                        </h2>
+                        <p>مدیریت و مشاهده اسناد صادر شده</p>
+                    </div>
+                    
+                    <div class="courses-header-actions">
+                        <div class="search-box" style="position: relative; flex: 1;">
+                            <input type="text" id="searchInput" class="form-input" placeholder="جستجو بر اساس نام دانش‌آموز یا کد ملی..." style="padding-right: 40px;">
+                            <i class="fas fa-search" style="position: absolute; right: 14px; top: 50%; transform: translateY(-50%); color: var(--text-muted);"></i>
+                        </div>
+                        <select id="documentTypeFilter" class="form-select" style="width: 200px;">
+                            <option value="all">همه انواع اسناد</option>
+                            <option value="certificate">گواهی تحصیلی</option>
+                            <option value="letter">نامه معافیت تحصیلی</option>
+                        </select>
+                        <div style="display: flex; gap: 8px;">
+                            <button class="btn btn-outline" id="exportDataBtn">
+                                <i class="fas fa-download"></i>
+                                خروجی گرفتن
+                            </button>
+                            <button class="btn btn-outline" id="importDataBtn">
+                                <i class="fas fa-upload"></i>
+                                بازیابی اطلاعات
+                            </button>
+                            <input type="file" id="importFile" accept=".json" style="display: none;">
+                        </div>
+                    </div>
+                    
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-file-certificate"></i>
+                            </div>
+                            <div class="stat-info">
+                                <div class="stat-number" id="totalCertificates">۰</div>
+                                <div class="stat-label">تعداد کل اسناد</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: var(--primary-600);">
+                                <i class="fas fa-file-contract"></i>
+                            </div>
+                            <div class="stat-info">
+                                <div class="stat-number" id="totalCertificatesType">۰</div>
+                                <div class="stat-label">گواهی تحصیلی</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: var(--success-600);">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div class="stat-info">
+                                <div class="stat-number" id="totalLetters">۰</div>
+                                <div class="stat-label">نامه معافیت</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: var(--warning-600);">
+                                <i class="fas fa-user-graduate"></i>
+                            </div>
+                            <div class="stat-info">
+                                <div class="stat-number" id="uniqueStudents">۰</div>
+                                <div class="stat-label">دانش‌آموزان منحصر به فرد</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="certificates-list" id="certificatesList">
+                        <!-- لیست اسناد اینجا نمایش داده می‌شود -->
+                    </div>
+                </div>
+
+                <!-- تب تنظیمات -->
+                <div class="tab-content" id="settings">
+                    <div class="tab-header">
+                        <h2>
+                            <i class="fas fa-cogs"></i>
+                            تنظیمات آموزشگاه
+                        </h2>
+                        <p>مدیریت اطلاعات پیشفرض آموزشگاه</p>
+                    </div>
+                    
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-map-marker-alt"></i>
+                                کد استان پیشفرض
+                            </label>
+                            <input type="text" id="defaultProvinceCode" class="form-input" placeholder="۱۶" maxlength="2" dir="ltr">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-map-pin"></i>
+                                کد منطقه پیشفرض
+                            </label>
+                            <input type="text" id="defaultAreaCode" class="form-input" placeholder="۱۶۷۰" maxlength="4" dir="ltr">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-school"></i>
+                                کد آموزشگاه پیشفرض
+                            </label>
+                            <input type="text" id="defaultSchoolCode" class="form-input" placeholder="۵۴۱۳۰۸۰۸" maxlength="8" dir="ltr">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-location-dot"></i>
+                                شهر آموزشگاه پیشفرض
+                            </label>
+                            <input type="text" id="defaultSchoolCity" class="form-input" placeholder="شهر محل آموزشگاه">
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <label class="form-label">
+                                <i class="fas fa-school-flag"></i>
+                                نام آموزشگاه پیشفرض
+                            </label>
+                            <input type="text" id="defaultSchoolName" class="form-input" placeholder="نام کامل آموزشگاه">
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <label class="form-label">
+                                <i class="fas fa-user-tie"></i>
+                                نام مدیر آموزشگاه پیشفرض
+                            </label>
+                            <input type="text" id="defaultManagerName" class="form-input" placeholder="نام و نام خانوادگی مدیر">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-calendar-days"></i>
+                                سال تحصیلی پیشفرض
+                            </label>
+                            <input type="text" id="defaultAcademicYear" class="form-input" placeholder="۱۴۰۴-۱۴۰۵" maxlength="9" dir="ltr">
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <div class="results-action-buttons" style="margin-top: 10px;">
+                                <button class="btn btn-success" id="saveDefaultsBtn">
+                                    <i class="fas fa-save"></i>
+                                    ذخیره تنظیمات پیشفرض
+                                </button>
+                                <button class="btn btn-outline" id="loadDefaultsBtn">
+                                    <i class="fas fa-download"></i>
+                                    بارگذاری تنظیمات پیشفرض
+                                </button>
+                                <button class="btn btn-error" id="clearDefaultsBtn">
+                                    <i class="fas fa-trash"></i>
+                                    پاک کردن تنظیمات
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- بخش مدیریت پایگاه داده دانش‌آموزان -->
+                    <div style="margin-top: 32px;">
+                        <div class="settings-panel">
+                            <h3>
+                                <i class="fas fa-database"></i>
+                                مدیریت پایگاه داده دانش‌آموزان
+                            </h3>
+                            <p>با آپلود فایل Excel حاوی اطلاعات دانش‌آموزان، می‌توانید با وارد کردن کد ملی، اطلاعات را به صورت خودکار در فرم پر کنید.</p>
+                            
+                            <div class="form-grid" style="margin-top: 20px;">
+                                <div class="form-group full-width" id="studentDbStats">
+                                    <div class="stats-grid" style="grid-template-columns: repeat(2, 1fr);">
+                                        <div class="stat-card mini" style="background: var(--gradient-primary);">
+                                            <div class="stat-icon" style="background: rgba(255,255,255,0.2);">
+                                                <i class="fas fa-users"></i>
+                                            </div>
+                                            <div class="stat-info">
+                                                <div class="stat-number" id="totalStudents">۰</div>
+                                                <div class="stat-label">تعداد دانش‌آموزان</div>
+                                            </div>
+                                        </div>
+                                        <div class="stat-card mini" style="background: var(--gradient-success);">
+                                            <div class="stat-icon" style="background: rgba(255,255,255,0.2);">
+                                                <i class="fas fa-calendar-alt"></i>
+                                            </div>
+                                            <div class="stat-info">
+                                                <div class="stat-number" id="lastUpdate">---</div>
+                                                <div class="stat-label">آخرین به‌روزرسانی</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label">
+                                        <i class="fas fa-file-excel"></i>
+                                        آپلود فایل Excel
+                                    </label>
+                                    <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                                        <button class="btn btn-primary" id="uploadExcelBtn">
+                                            <i class="fas fa-upload"></i>
+                                            انتخاب فایل Excel
+                                        </button>
+                                        <button class="btn btn-error" id="clearDatabaseBtn">
+                                            <i class="fas fa-trash"></i>
+                                            پاک کردن پایگاه داده
+                                        </button>
+                                        <button class="btn btn-success" id="downloadSampleExcelBtn">
+                                            <i class="fas fa-download"></i>
+                                            دانلود نمونه فایل Excel
+                                        </button>
+                                    </div>
+                                    <input type="file" id="excelFile" accept=".xlsx,.xls,.csv" style="display: none;">
+                                    <div class="form-hint">
+                                        فرمت مورد قبول: Excel (xlsx, xls) یا CSV<br>
+                                        ستون‌های مورد نیاز: کد ملی، نام، نام خانوادگی، نام پدر، تاریخ تولد، پایه، رشته
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label">
+                                        <i class="fas fa-search"></i>
+                                        راهنمای استفاده
+                                    </label>
+                                    <div class="info-card" style="margin-top: 0;">
+                                        <i class="fas fa-lightbulb"></i>
+                                        <div>
+                                            <ol style="padding-right: 20px; color: var(--text-secondary); line-height: 1.8;">
+                                                <li>فایل Excel حاوی اطلاعات دانش‌آموزان را آپلود کنید</li>
+                                                <li>به تب "اطلاعات دانش‌آموز" بروید</li>
+                                                <li>کد ملی دانش‌آموز را وارد کنید و دکمه جستجو را بزنید</li>
+                                                <li>اطلاعات دانش‌آموز به صورت خودکار در فرم پر می‌شود</li>
+                                            </ol>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 32px;">
+                        <div class="settings-panel">
+                            <h3>
+                                <i class="fas fa-keyboard"></i>
+                                کلیدهای میانبر
+                            </h3>
+                            <div class="shortcut-list">
+                                <div class="shortcut-item">
+                                    <span class="shortcut-key">Ctrl + N</span>
+                                    <span class="shortcut-description">سند جدید</span>
+                                </div>
+                                <div class="shortcut-item">
+                                    <span class="shortcut-key">Ctrl + S</span>
+                                    <span class="shortcut-description">ذخیره سند فعلی</span>
+                                </div>
+                                <div class="shortcut-item">
+                                    <span class="shortcut-key">Ctrl + P</span>
+                                    <span class="shortcut-description">چاپ سند</span>
+                                </div>
+                                <div class="shortcut-item">
+                                    <span class="shortcut-key">Ctrl + →</span>
+                                    <span class="shortcut-description">تب بعدی</span>
+                                </div>
+                                <div class="shortcut-item">
+                                    <span class="shortcut-key">Ctrl + ←</span>
+                                    <span class="shortcut-description">تب قبلی</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ناوبری پایین -->
+            <div class="content-footer" id="contentFooter">
+                <div class="footer-actions">
+                    <div class="navigation-buttons">
+                        <button class="btn btn-outline" id="prevTabBtn">
+                            <i class="fas fa-arrow-right"></i>
+                            قبلی
+                        </button>
+                        <button class="btn btn-primary" id="nextTabBtn">
+                            بعدی
+                            <i class="fas fa-arrow-left"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="system-status">
+                    <div class="status-indicator">
+                        <div class="status-dot online"></div>
+                        <span id="statusText">سیستم آماده به کار</span>
+                    </div>
+                    <div class="status-indicator">
+                        <span>توسعه توسط <a href="https://t.me/mbrzgrsa" style="color:aliceblue; text-decoration: none;">mbrzgrsa</a></span>
+                    </div>
+                    <div class="auto-save-status" id="autoSaveStatus">
+                        <i class="fas fa-save"></i>
+                        <span>ذخیره خودکار فعال</span>
+                    </div>
+                    <div class="version">نسخه ۵.۲.۰</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- دکمه‌های موبایل در فوتر -->
+    <div class="mobile-footer-actions" id="mobileFooterActions">
+        <button class="btn btn-outline mobile-action-btn" id="mobileHomeBtn">
+            <i class="fas fa-home"></i>
+            <span>خانه</span>
+        </button>
+        <button class="btn btn-outline mobile-action-btn" id="mobileHelpBtn">
+            <i class="fas fa-question-circle"></i>
+            <span>راهنما</span>
+        </button>
+        <button class="btn btn-primary mobile-action-btn" id="mobileNewCertificateBtn">
+            <i class="fas fa-file-circle-plus"></i>
+            <span>سند جدید</span>
+        </button>
+    </div>
+
+    <!-- اعلان‌ها -->
+    <div class="notification-container" id="notificationContainer"></div>
+
+    <!-- اضافه کردن کتابخانه‌های مورد نیاز -->
+    <script src="./assets/js/jquery.min.js"></script>
+    <script src="./assets/js/persian-date.min.js"></script>
+    <script src="./assets/js/persian-datepicker.min.js"></script>
+    <script src="./assets/js/popup.js"></script>
+</body>
+</html>
