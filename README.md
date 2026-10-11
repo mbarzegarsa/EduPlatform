@@ -42,3 +42,114 @@
 ├── assets/js/edu-uniform.js    # فوتر مشترک قبلی/بعدی
 ├── font/Vazirmatn*.woff2       # فونت ریشه
 └── .github/workflows/static.yml# دیپلوی Pages
+```
+
+> **دلیل تکرار دارایی‌ها:** هر زیرپوشه یک نسخهٔ محلی از `edu-uniform.css/js` و `assets/font/` دارد تا اجرای مستقیم از فایل (بدون سرور) و نیز انتشار در زیرمسیر GitHub Pages بدون شکستن مسیرها ممکن باشد.
+
+---
+
+## اجرای محلی
+
+```bash
+# روش ۱: اجرای مستقیم
+xdg-open index.html          # در ویندوز: start index.html  |  در مک: open index.html
+
+# روش ۲: سرور محلی (پیشنهادی؛ برای جلوگیری از محدودیت CORS در ماژول‌ها)
+python3 -m http.server 8000
+# سپس در مرورگر: http://localhost:8000
+```
+
+**پیش‌نیاز:** ندارد.
+داده‌ها در `localStorage` ذخیره می‌شوند. اینترنت تنها برای بارگذاری فونت/آیکون از CDN لازم است؛ هستهٔ برنامه به‌صورت آفلاین نیز کار می‌کند.
+
+---
+
+## انتشار روی GitHub Pages
+
+ورک‌فلوی آماده در [`.github/workflows/static.yml`](.github/workflows/static.yml) قرار دارد. با هر پوش روی شاخهٔ `main`، دیپلوی خودکار انجام می‌شود.
+
+1. مخزن را بسازید و پوش کنید:
+
+   ```bash
+   git init -b main
+   git add .
+   git commit -m "EduPlatform release"
+   git remote add origin https://github.com/mbarzegarsa/EduPlatform.git
+   git push -u origin main
+   ```
+
+2. به مسیر **Settings → Pages → Source: GitHub Actions** بروید.
+3. نشانی سایت ساخته می‌شود: `https://mbarzegarsa.github.io/EduPlatform/`.
+
+> **نکتهٔ مسیرها:** همهٔ لینک‌ها نسبی نوشته شده‌اند (`./certificate` و نه `/certificate`) تا انتشار در زیرمسیر Pages دچار خطا نشود.
+
+---
+
+## افزونهٔ مرورگر
+
+- **کرومیوم / اج:** فایل `extension.zip` را دانلود و استخراج کنید، به `chrome://extensions` بروید، گزینهٔ **Developer mode** را فعال کنید و روی **Load unpacked** بزنید.
+- **فایرفاکس:** از فروشگاه نصب کنید (دکمهٔ لندینگ به‌طور خودکار تشخیص می‌دهد).
+- **موبایل / تبلت:** پشتیبانی نمی‌شود؛ افزونه فقط روی دسکتاپ نصب می‌شود. لندینگ و پنجرهٔ راهنما نیز همین موضوع را اطلاع می‌دهند.
+
+---
+
+## یکدستی UI/UX
+
+لایهٔ `edu-uniform v1.0.0` ظاهر را یکسان کرده است، بدون دست‌زدن به منطق برنامه:
+
+- **هدر:** `min-height: 64px`، `padding: 16×32`، چیدمان `space-between` در هر ۶ صفحه.
+- **فوتر:** ماژول‌های `certificate` و `gpa` به‌عنوان مدل مرجع انتخاب شدند. `seat-number` و `profile-downloader` نیز همان ساختار `footer-actions + navigation-buttons (#prevTabBtn/#nextTabBtn) + system-status` را گرفتند و جایگاه دکمه‌های قبلی/بعدی ثابت شد.
+- **دکمه:** `padding: 12×20`، `radius: 10px`، `font-weight: 700`. رنگ برند هر ماژول حفظ شد.
+- **`edu-uniform.js`:** تنها دکمه‌های دارای `data-edu-uniform` را سیم‌کشی می‌کند. هندلرهای `switchTab/previousTab/nextTab` در گواهی و معدل بازنویسی نشدند.
+- **آیکون FontAwesome:** از قانون یکدست‌سازی فونت مستثنا شد تا نمایش آیکون‌ها نشکند.
+
+---
+
+## فونت وزیر
+
+- **متن رابط کاربری:** `Vazirmatn` ← `Vazir` ← `Segoe UI/Tahoma`.
+- **چاپ و پنجرهٔ چاپ** (`window.open().document.write`) نیز به `Vazirmatn` مجهز شد: `popup.js` (گواهی و نامه)، `seat-number/script.js`، `profile-downloader/script.js` و `gpa-calculator.js`.
+- **فایل گمشدهٔ `Vazirmatn-Bold.woff2`** (در CSS/JS ارجاع داده شده بود اما فایل وجود نداشت و خطای 404 می‌داد) از `Vazirmatn.woff2` ساخته و در هر ۵ پوشهٔ `assets/font/` قرار گرفت.
+- **`failedstudents`** بستهٔ وزنی کامل خود را دارد: `fonts/webfonts/Vazirmatn-*.woff2`.
+
+---
+
+## چاپ
+
+| خروجی | اندازه | نکته |
+|---|---|---|
+| گواهی / نامه | A4 عمودی | ۳ قالب `official` / `simple` / `modern` |
+| معدل | A4 | جدول تحلیل دروس |
+| آلبوم | A4 عمودی | هر کلاس دقیقاً یک برگ |
+| صندلی | A4 افقی | هر کارت یک برگ، نسبت `1.414` |
+| مردودی | A4 عمودی، حاشیهٔ `6mm` | چند دانش‌آموز در هر برگ، `zoom` خودکار |
+
+قاعدهٔ `print-color-adjust: exact` در همهٔ ماژول‌ها فعال شد تا رنگ چاپ با پیش‌نمایش یکسان باشد.
+
+---
+
+## فناوری‌های استفاده‌شده
+
+| فناوری | نقش | مرجع |
+|---|---|---|
+| HTML5 / CSS3 / Vanilla JS | هستهٔ ایستا | [MDN Web Docs](https://developer.mozilla.org/) |
+| SheetJS (xlsx) | خواندن/نوشتن Excel | <https://sheetjs.com/> |
+| html2pdf / html2canvas / jsPDF | تولید PDF از DOM | <https://github.com/eKoopmans/html2pdf.js> |
+| pdf.js | رندر و تحلیل PDF | <https://mozilla.github.io/pdf.js/> |
+| persian-datepicker | انتخاب تاریخ شمسی | <https://github.com/Mds92/MD.BootstrapPersianDateTimePicker> |
+| Font Awesome 6 | آیکون‌ها | <https://fontawesome.com/> |
+| Vazirmatn | فونت فارسی | <https://github.com/rastikerdar/vazirmatn> |
+| GitHub Pages | میزبانی ایستا | <https://pages.github.com/> |
+
+---
+
+## مجوز
+
+این پروژه تحت [مجوز MIT](LICENSE) منتشر شده است — © ۲۰۲۶ mbarzegarsa.
+
+---
+
+## توسعه‌دهنده
+
+طراحی و توسعه: [mbrzgrsa](https://t.me/mbrzgrsa)
+برای گزارش باگ یا درخواست قابلیت جدید، یک [Issue](https://github.com/mbarzegarsa/EduPlatform/issues) باز کنید.
