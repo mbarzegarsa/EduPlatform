@@ -1078,20 +1078,20 @@ class SeatNumberSystem {
             <title>کارت‌های شماره صندلی - ${this.seatCards.length} کارت</title>
             <style>
                 @font-face {
-                    font-family: 'Vazir';
+                    font-family: 'Vazirmatn';
                     src: url('../font/Vazirmatn.woff2') format('woff2');
                     font-weight: normal;
                     font-style: normal;
                     font-display: swap;
                 }
                 @font-face {
-                    font-family: 'Vazir';
+                    font-family: 'Vazirmatn';
                     src: url('../font/Vazirmatn-Bold.woff2') format('woff2');
                     font-weight: bold;
                     font-style: normal;
                     font-display: swap;
                 }
-                * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Vazir', sans-serif; }
+                * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Vazirmatn', 'Vazir', sans-serif; }
                 body { background: white; direction: rtl; }
                 @page { size: A4 landscape; margin: 0; }
                 @media print { 

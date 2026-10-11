@@ -1,0 +1,233 @@
+/* ============================================================
+ * EduPlatform Uniform Layer v1.0.0
+ * هدف: یکدست‌سازی ظاهری (هدر/فوتر/دکمه‌ها/فونت/چاپ) بدون تغییر منطق
+ * - فقط چیدمان و تایپوگرافی را یکسان می‌کند، رنگ برند هر بخش حفظ می‌شود
+ * - هیچ سلکتور منطقی (data-tab, idهای دانلود/محاسبه) را تغییر نمی‌دهد
+ * - آیکون‌های FontAwesome مستثنی شده‌اند تا نشکنند
+ * ============================================================ */
+
+/* ---------- ۱) فونت واحد وزیر برای همه متن‌ها ---------- */
+html body,
+html body div, html body span, html body p,
+html body h1, html body h2, html body h3, html body h4, html body h5, html body h6,
+html body a, html body label, html body small,
+html body button:not([class*="fa-"]),
+html body input, html body select, html body textarea, html body option,
+html body table, html body th, html body td,
+html body .tab-header, html body .tab-header h2, html body .tab-header p,
+html body .content-header, html body .content-footer,
+html body .site-header, html body .site-footer,
+html body .header, html body .footer,
+html body .card-panel, html body .info-card, html body .stat-card,
+html body .form-label, html body .form-input, html body .form-select,
+html body .form-hint, html body .btn, html body .button-group,
+html body .navigation-buttons, html body .footer-actions, html body .system-status {
+  font-family: 'Vazirmatn', 'Vazir', 'Segoe UI', Tahoma, system-ui, sans-serif !important;
+}
+
+/* آیکون‌ها دست نخورده بمانند */
+i[class*="fa-"], span[class*="fa-"],
+.fa, .fas, .far, .fab, .fal, .fad,
+[class^="fa-"], [class*=" fa-"] {
+  font-family: "Font Awesome 6 Free", "Font Awesome 6 Brands", "FontAwesome" !important;
+}
+
+/* ---------- ۲) هدر یکسان: ارتفاع/پدینگ/چیدمان ---------- */
+.content-header {
+  min-height: 64px !important;
+  padding: 16px 32px !important;
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  flex-wrap: wrap !important;
+  gap: 12px !important;
+}
+.content-header .header-title h1 {
+  font-size: 1.25rem !important;
+  font-weight: 800 !important;
+  line-height: 1.6 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  margin: 0 !important;
+}
+.content-header .header-title p {
+  font-size: 0.8rem !important;
+  margin-top: 4px !important;
+  opacity: 0.75 !important;
+}
+.header-actions {
+  display: flex !important;
+  gap: 12px !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+}
+
+/* هدر لندینگ و تحلیل کارنامه هم‌خانواده شود (بدون تغییر رنگ برند) */
+.site-header, .header {
+  min-height: 64px !important;
+  padding: 14px 28px !important;
+}
+.site-header .header-container, .header .header-container {
+  max-width: 1200px !important;
+  margin: 0 auto !important;
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  flex-wrap: wrap !important;
+  gap: 12px !important;
+}
+
+/* ---------- ۳) تیتر تب‌ها: یک شکل در همه اپ‌ها ---------- */
+.tab-header {
+  margin-bottom: 20px !important;
+  position: relative !important;
+}
+.tab-header h2 {
+  font-size: 1.3rem !important;
+  font-weight: 800 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  flex-wrap: wrap !important;
+  margin: 0 !important;
+}
+.tab-header p {
+  margin-top: 8px !important;
+  font-size: 0.8rem !important;
+  opacity: 0.75 !important;
+}
+/* خط تزئینی زیر تیتر در هر ۴ اپ سایدباردار از قبل یکسان است (گرادیان برند)؛ دست نخورده می‌ماند */
+
+/* ---------- ۴) فوتر یکسان + جایگاه ثابت دکمه قبلی/بعدی ---------- */
+.content-footer {
+  padding: 10px 24px !important;
+  margin-top: auto !important;
+  flex-shrink: 0 !important;
+}
+.footer-actions {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  margin-bottom: 10px !important;
+  flex-wrap: wrap !important;
+  gap: 12px !important;
+}
+.navigation-buttons {
+  display: flex !important;
+  gap: 10px !important;
+  align-items: center !important;
+  order: 1 !important;
+}
+.footer-actions .action-buttons,
+.footer-actions .results-action-buttons {
+  display: flex !important;
+  gap: 10px !important;
+  flex-wrap: wrap !important;
+  order: 2 !important;
+}
+.system-status {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 16px !important;
+  flex-wrap: wrap !important;
+  font-size: 0.65rem !important;
+  opacity: 0.9 !important;
+}
+/* وقتی فوتر فقط استاتوس دارد (قبل از اصلاح HTML)، وسط‌چین نشود و هم‌خانواده بماند */
+.content-footer .system-status:only-child {
+  border-top: none !important;
+}
+
+/* فوتر لندینگ/کارنامه هم‌قد شود */
+.site-footer, .footer {
+  padding: 16px 28px !important;
+  text-align: center !important;
+  font-size: 0.75rem !important;
+}
+
+/* ---------- ۵) دکمه‌ها: یک اندازه/گردی/وزن (رنگ هر دکمه حفظ می‌شود) ---------- */
+.btn {
+  padding: 12px 20px !important;
+  border-radius: 10px !important;
+  font-size: 0.85rem !important;
+  font-weight: 700 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  white-space: nowrap !important;
+  line-height: 1.5 !important;
+  cursor: pointer !important;
+}
+.btn-sm {
+  padding: 8px 14px !important;
+  font-size: 0.75rem !important;
+  border-radius: 8px !important;
+}
+.button-group {
+  display: flex !important;
+  gap: 12px !important;
+  flex-wrap: wrap !important;
+  margin-top: 20px !important;
+}
+.button-group .btn {
+  flex: 1 1 auto !important;
+  justify-content: center !important;
+}
+/* دکمه‌های قبلی/بعدی همیشه یک‌جا و یک‌شکل */
+#prevTabBtn, #nextTabBtn {
+  min-width: 120px !important;
+}
+#prevTabBtn i, #nextTabBtn i {
+  font-size: 0.8em !important;
+}
+
+/* ورودی‌ها یکدست */
+.form-input, .form-select, .form-textarea,
+input[type="text"], input[type="number"], select, textarea {
+  font-size: 0.85rem !important;
+  line-height: 1.6 !important;
+}
+
+/* ---------- ۶) چاپ: فونت وزیر حتی در خروجی چاپ ---------- */
+@media print {
+  html body,
+  html body div, html body span, html body p,
+  html body h1, html body h2, html body h3, html body h4,
+  html body table, html body th, html body td,
+  html body a, html body label {
+    font-family: 'Vazirmatn', 'Vazir', Tahoma, sans-serif !important;
+  }
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+}
+
+/* ---------- ۷) ریسپانسیو یکسان هدر/فوتر ---------- */
+@media (max-width: 768px) {
+  .content-header {
+    padding: 12px 20px !important;
+  }
+  .content-header .header-title h1 {
+    font-size: 1.05rem !important;
+  }
+  .content-footer {
+    padding: 10px 16px !important;
+  }
+  .footer-actions {
+    flex-direction: column !important;
+    align-items: stretch !important;
+  }
+  .navigation-buttons {
+    width: 100% !important;
+  }
+  .navigation-buttons .btn {
+    flex: 1 !important;
+  }
+  .site-header, .header {
+    padding: 12px 16px !important;
+  }
+}

@@ -7,6 +7,7 @@
     <title>سیستم حرفه‌ای آلبوم کلاسی - چیدمان هوشمند</title>
     <link rel="stylesheet" href="./assets/css/all.min.css">
     <link rel="stylesheet" href="./assets/css/style.css">
+    <link rel="stylesheet" href="./assets/css/edu-uniform.css">
 </head>
 <body>
     <!-- هدر موبایل (فقط در موبایل نمایش داده می‌شود) -->
@@ -376,8 +377,32 @@
             </div>
 
             <footer class="content-footer">
+                <div class="footer-actions">
+                    <div class="navigation-buttons">
+                        <button class="btn btn-outline" id="prevTabBtn" type="button" data-edu-uniform="1">
+                            <i class="fas fa-arrow-right"></i>
+                            قبلی
+                        </button>
+                        <button class="btn btn-primary" id="nextTabBtn" type="button" data-edu-uniform="1">
+                            بعدی
+                            <i class="fas fa-arrow-left"></i>
+                        </button>
+                    </div>
+                </div>
+
                 <div class="system-status">
-                    <div class="status-indicator"><div class="status-dot"></div><span>سیستم آماده به کار</span></div>
+                    <div class="status-indicator">
+                        <div class="status-dot online"></div>
+                        <span>سیستم آماده به کار</span>
+                    </div>
+                    <div class="status-indicator">
+                        <div class="status-dot online"></div>
+                        <span>توسعه توسط mbrzgrsa@</span>
+                    </div>
+                    <div class="auto-save-status">
+                        <i class="fas fa-save"></i>
+                        <span>ذخیره خودکار فعال</span>
+                    </div>
                     <div class="version">نسخه ۳.۰ - آلبوم کلاسی هوشمند</div>
                 </div>
             </footer>
@@ -416,5 +441,6 @@
     <script src="./assets/js/xlsx.full.min.js"></script>
     <script src="./assets/js/html2pdf.bundle.min.js"></script>
     <script src="./assets/js/script.js"></script>
+    <script src="./assets/js/edu-uniform.js"></script>
 </body>
 </html>

@@ -990,20 +990,20 @@ class ClassAlbumSystem {
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
             <style>
                 @font-face {
-                    font-family: 'Vazir';
+                    font-family: 'Vazirmatn';
                     src: url('../font/Vazirmatn.woff2') format('woff2');
                     font-weight: normal;
                     font-style: normal;
                     font-display: swap;
                 }
                 @font-face {
-                    font-family: 'Vazir';
+                    font-family: 'Vazirmatn';
                     src: url('../font/Vazirmatn-Bold.woff2') format('woff2');
                     font-weight: bold;
                     font-style: normal;
                     font-display: swap;
                 }
-                * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Vazir', 'Segoe UI', sans-serif; }
+                * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Vazirmatn', 'Vazir', 'Segoe UI', sans-serif; }
                 body { background: white; direction: rtl; }
                 @page { size: A4 portrait; margin: 0; }
                 @media print { 

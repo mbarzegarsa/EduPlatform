@@ -2138,7 +2138,7 @@ document.getElementById('homeBtn')?.addEventListener('click', () => window.locat
                 <title>گواهی تحصیلی - ${data.studentName}</title>
                 <style>
                    @font-face {
-                        font-family: 'Vazir';
+                        font-family: 'Vazirmatn';
                         src: url('../font/Vazirmatn.woff2') format('woff2');
                         font-weight: normal;
                         font-style: normal;
@@ -2146,7 +2146,7 @@ document.getElementById('homeBtn')?.addEventListener('click', () => window.locat
                     }
                     
                     @font-face {
-                        font-family: 'Vazir';
+                        font-family: 'Vazirmatn';
                         src: url('../font/Vazirmatn-Bold.woff2') format('woff2');
                         font-weight: bold;
                         font-style: normal;
@@ -2154,11 +2154,11 @@ document.getElementById('homeBtn')?.addEventListener('click', () => window.locat
                     }
                     
                     * {
-                        font-family: 'Vazir', 'Segoe UI', system-ui, sans-serif;
+                        font-family: 'Vazirmatn', 'Vazir', 'Segoe UI', system-ui, sans-serif;
                     }
                     
                     body {
-                        font-family: 'Vazir', sans-serif;
+                        font-family: 'Vazirmatn', 'Vazir', sans-serif;
                         margin: 0;
                         padding: 0;
                         background: white;
@@ -2269,7 +2269,7 @@ document.getElementById('homeBtn')?.addEventListener('click', () => window.locat
                     @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100;300;400;500;700;900&display=swap');
                     
                     body {
-                        font-family: 'Vazir', sans-serif;
+                        font-family: 'Vazirmatn', 'Vazir', sans-serif;
                         margin: 0;
                         padding: 0;
                         background: white;
@@ -2464,7 +2464,7 @@ document.getElementById('homeBtn')?.addEventListener('click', () => window.locat
                 margin-bottom: 3px;
                 font-weight: 600;
                 line-height: 1.3;
-                font-family: 'Vazir', sans-serif;
+                font-family: 'Vazirmatn', 'Vazir', sans-serif;
                 white-space: nowrap;
             }
             
@@ -2510,7 +2510,7 @@ document.getElementById('homeBtn')?.addEventListener('click', () => window.locat
                 color: #6c757d;
                 font-size: 9pt;
                 text-align: center;
-                font-family: 'Vazir', sans-serif;
+                font-family: 'Vazirmatn', 'Vazir', sans-serif;
             }
             
             .${documentType}-text {
@@ -2693,7 +2693,7 @@ document.getElementById('homeBtn')?.addEventListener('click', () => window.locat
                 margin-bottom: 1mm;
                 font-weight: 600;
                 line-height: 1.1;
-                font-family: 'Vazir', sans-serif;
+                font-family: 'Vazirmatn', 'Vazir', sans-serif;
                 white-space: nowrap;
             }
             
@@ -2746,7 +2746,7 @@ document.getElementById('homeBtn')?.addEventListener('click', () => window.locat
                 color: #6c757d;
                 font-size: 8pt;
                 text-align: center;
-                font-family: 'Vazir', sans-serif;
+                font-family: 'Vazirmatn', 'Vazir', sans-serif;
             }
             
             .letter-body-compact {
