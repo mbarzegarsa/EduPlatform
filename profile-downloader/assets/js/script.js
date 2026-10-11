@@ -1,3 +1,20 @@
+// آدرس Cloudflare Worker جایگزین proxy.php روی GitHub Pages.
+// بعد از Deploy، URL workers.dev را اینجا بگذار:
+//   const SIDA_WORKER_URL = 'https://eduplatform-sida-proxy.<subdomain>.workers.dev';
+// خالی = حالت لوکال با proxy.php (PHP).
+const SIDA_WORKER_URL = 'https://sida.mbsa1376.workers.dev';
+
+function buildSidaDirectUrl(code, province, area, school) {
+    const fileCode = String(code ?? '').replace(/^0+/, '') || '0';
+    return `https://sida.medu.ir/ImageStudent/${province}/${area}/${school}/${fileCode}.jpg`;
+}
+
+function buildSidaProxyUrl(code, province, area, school) {
+    const params = new URLSearchParams({ code: String(code), province, area, school });
+    if (SIDA_WORKER_URL) return `${SIDA_WORKER_URL.replace(/\/$/, '')}?${params.toString()}`;
+    return `proxy.php?${params.toString()}`;
+}
+
 class ClassAlbumSystem {
     constructor() {
         this.excelData = null;
@@ -634,12 +651,14 @@ class ClassAlbumSystem {
     }
 
     async downloadSingleImage(student, province, area, school) {
-        const url = `proxy.php?code=${student.nationalCode}&province=${province}&area=${area}&school=${school}`;
+        // روی GitHub Pages از Worker، روی هاست PHP از proxy.php استفاده می‌شود.
+        // اگر Worker خالی/خراب باشد، نمایش مستقیم <img> (بدون CORS) fallback است.
+        const url = buildSidaProxyUrl(student.nationalCode, province, area, school);
         try {
             const response = await fetch(url);
             if (!response.ok) throw new Error();
             const blob = await response.blob();
-            if (blob.size < 1000) throw new Error();
+            if (blob.size < 1000 || (blob.type && !blob.type.startsWith('image'))) throw new Error();
             return { success: true, imageUrl: URL.createObjectURL(blob) };
         } catch {
             return { success: false, imageUrl: null };
@@ -697,7 +716,9 @@ class ClassAlbumSystem {
             const province = document.getElementById('provinceCode')?.value || '16';
             const area = document.getElementById('areaCode')?.value || '1670';
             const school = document.getElementById('schoolCode')?.value || '54130808';
-            return `proxy.php?code=${student.nationalCode}&province=${province}&area=${area}&school=${school}`;
+            // پیش‌نمایش <img> نیاز به CORS ندارد؛ مستقیم سیدا همیشه کار می‌کند.
+            if (SIDA_WORKER_URL) return buildSidaDirectUrl(student.nationalCode, province, area, school);
+            return buildSidaProxyUrl(student.nationalCode, province, area, school);
         }
         return null;
     }
