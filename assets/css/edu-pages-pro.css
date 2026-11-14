@@ -1,0 +1,45 @@
+﻿/* EduPlatform Pages Pro UI Layer - presentation only, no logic/print changes */
+:root { --pro-glow: rgba(20,184,166,0.18); }
+body {
+  background:
+    radial-gradient(ellipse 80% 45% at 50% -15%, var(--pro-glow), transparent 60%),
+    radial-gradient(ellipse 35% 25% at 100% 10%, rgba(59,130,246,0.08), transparent 55%),
+    var(--color-bg-primary, #0a0c10) !important;
+  background-attachment: fixed;
+}
+.app-container, .main-content { position: relative; z-index: 1; }
+.sidebar {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-left-color: rgba(255,255,255,0.07) !important;
+}
+.content-header {
+  background: rgba(10,12,16,0.72) !important;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+.card-panel, .info-card, .stat-card, .upload-section, .panel, .stats .stat, .form-section {
+  border-radius: 14px !important;
+  box-shadow: 0 1px 0 rgba(255,255,255,0.03) inset, 0 8px 24px rgba(0,0,0,0.18);
+}
+.btn, .button, button.btn { border-radius: 999px !important; }
+.btn-primary { box-shadow: 0 6px 16px rgba(20,184,166,0.22); }
+.tab-header h2, .header-title h1 { letter-spacing: -0.01em; }
+.nav-item.active { box-shadow: inset -3px 0 0 var(--color-primary, #14b8a6); }
+.form-input, .form-select, input[type="text"], input[type="number"], select, textarea {
+  transition: border-color .15s ease, box-shadow .15s ease, background .15s ease;
+}
+.form-input:focus, .form-select:focus, input:focus, select:focus, textarea:focus {
+  box-shadow: 0 0 0 3px rgba(20,184,166,0.12) !important;
+}
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-thumb { background: rgba(148,163,184,0.25); border-radius: 999px; border: 2px solid transparent; background-clip: padding-box; }
+::-webkit-scrollbar-track { background: transparent; }
+@media (prefers-reduced-motion: no-preference) {
+  .card-panel, .info-card, .stat-card, .nav-item, .btn { transition: transform .15s ease, box-shadow .2s ease, border-color .15s ease, background .15s ease, color .15s ease; }
+}
+@media print {
+  body { background: #fff !important; }
+  .sidebar, .content-header, .content-footer, .mobile-header, .mobile-footer-actions, .sidebar-overlay { backdrop-filter: none !important; }
+  .card-panel, .info-card, .stat-card { box-shadow: none !important; }
+}
